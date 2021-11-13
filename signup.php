@@ -49,7 +49,7 @@
 						<span class="focus-input100"></span><br>
 
 						<div class="container-login100-form-btn">
-							<button id="demo" class="login100-form-btn" onclick="compare()">
+							<button class="login100-form-btn" onclick="compare()">
 								Sign Up
 							</button>
 						</div><br>
@@ -69,7 +69,6 @@
 				<script>
         		function compare() 
 				{
-					document.getElementById("demo").innerHTML = "YOU CLICKED ME!";
             		var passValue = document.getElementById("Password");
             		var confpassValue = document.getElementById("ConfirmPassword");
 					if(passValue != confpassValue) 
