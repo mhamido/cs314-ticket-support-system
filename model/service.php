@@ -1,7 +1,7 @@
 <?php
 interface Service {
-     public function servicePrice($price);
-    public function perform($invoice);
-    public function description($desCription);
+     public function price();
+    public function perform();
+    public function description();
 }
  ?> 

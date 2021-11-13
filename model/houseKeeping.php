@@ -4,10 +4,15 @@ require_once 'service.php';
 
 class HouseKeeping implements Service{
 
-  public function servicePrice($price){
+  public function price(){
+    return;
 
   }
-    public function perform($invoice){}
-    public function description($desCription){}
+    public function perform(){
+      return;
+    }
+    public function description(){
+      return;
+    }
 }
  ?> 
