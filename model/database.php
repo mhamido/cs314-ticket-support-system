@@ -6,7 +6,7 @@ class DatabaseConnection extends mysqli
 
     private function __construct()
     {
-        parent::__construct('localhost', 'root', '', 'oose');
+        parent::__construct('localhost', 'root', '', 'project database');
     }
 
     public static function getInstance()
