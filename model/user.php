@@ -1,5 +1,5 @@
 <?php
-
+require_once "database.php";
 class User
 {
     private $id;
@@ -11,15 +11,38 @@ class User
 
     public function __construct($id)
     {
-        throw new Exception('TODO');   
+       $stmt = "SELECT * FROM user WHERE user.id=$id";
+       $result= DatabaseConnection::getInstance()->query($stmt);
+        if(!$result){
+            echo("User not found");
+                return;
+        }
+        
+        $this->id=$id;
+        $this->displayName= $result["DisplayName"];
+        $this->email=$result["email"];
+        $this->password=$result["Password"];
+        $this->lastLogin=$result["LastLogin"];
+        $this->signupDate=$result["SignupDate"];
+        
     }
 
 
-    public function login()
+    public static function login($email,$password)
     {
+        $stmt= "SELECT user.id WHERE user.email=$email AND user.Password=$password";
+        $result = DatabaseConnection::getInstance()->query($stmt);
+        if(!$result){
+            echo 'Invalid Email/Password.';
+            return;
+            
+        }
+        $id=$result["id"];
+        return new User($id);
     }
 
-    public function signup()
+    public static function signup()
     {
+        
     }
 }
