@@ -37,29 +37,34 @@
 					</span>
 
 						<input class="input100" type="text" name="DisplayName" placeholder="DisplayName" required>
-						<span class="focus-input100"></span>
-					<br/>
+						<span class="focus-input100"></span><br>
+
 						<input class="input100" type="password" name="pass" placeholder="Password" required>
-						<span class="focus-input100"></span>
-					<br/>
+						<span class="focus-input100"></span><br>
 
 						<input class="input100" type="password" name="pass" placeholder="ConfirmPassword" required>
-						<span class="focus-input100"></span>
-					<br/>
+						<span class="focus-input100"></span><br>
 
 						<input class="input100" type="email" name="pass" placeholder="E_mail" required>
-						<span class="focus-input100"></span>
-					<br/>
+						<span class="focus-input100"></span><br>
 
-						<button class="login100-form-btn">
-							Sign Up
-						</button>
-					<br/>
-					
-						<a href="index.php" class="txt3">
-							Log In now
-						</a>
+						<div class="container-login100-form-btn">
+							<button class="login100-form-btn">
+								Sign Up
+							</button>
+						</div>
 
+						<div class="flex-col-c p-t-170 p-b-40">
+                        	<span class="txt1 p-b-9">
+                            	Have an account?
+                       		</span>
+
+							<a href="index.php" class="txt3">
+								Log In now
+							</a>
+                    	</div>
+						
+					</div>
 				</form>
 			</div>
 		</div>
