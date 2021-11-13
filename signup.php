@@ -36,18 +36,18 @@
 						Sign Up
 					</span>
 
-						<input class="input100" type="text" name="DisplayName" placeholder="DisplayName">
+						<input class="input100" type="text" name="DisplayName" placeholder="DisplayName" required>
 						<span class="focus-input100"></span>
 					<br/>
-						<input class="input100" type="password" name="pass" placeholder="Password">
-						<span class="focus-input100"></span>
-					<br/>
-
-						<input class="input100" type="password" name="pass" placeholder="ConfirmPassword">
+						<input class="input100" type="password" name="pass" placeholder="Password" required>
 						<span class="focus-input100"></span>
 					<br/>
 
-						<input class="input100" type="email" name="pass" placeholder="E_mail">
+						<input class="input100" type="password" name="pass" placeholder="ConfirmPassword" required>
+						<span class="focus-input100"></span>
+					<br/>
+
+						<input class="input100" type="email" name="pass" placeholder="E_mail" required>
 						<span class="focus-input100"></span>
 					<br/>
 
