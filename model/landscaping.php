@@ -4,7 +4,7 @@ require_once 'service.php';
 
 class Landscaping implements Service{
 
-  public function servicePrice(){
+  public function price(){
       return;
 
   }
