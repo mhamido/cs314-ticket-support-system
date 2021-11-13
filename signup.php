@@ -52,9 +52,9 @@
 							<button class="login100-form-btn">
 								Sign Up
 							</button>
-						</div>
+						</div><br>
 
-						<div class="flex-col-c p-t-170 p-b-40">
+						<div class="flex-col-c p-b-40">
                         	<span class="txt1 p-b-9">
                             	Have an account?
                        		</span>
