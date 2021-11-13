@@ -54,7 +54,7 @@ class User
     public static function login($email, $password)
     {
         $stmt = DatabaseConnection::getInstance()->prepare(
-            "SELECT user.id WHERE
+            "SELECT user.id FROM user WHERE
                 user.email=? AND
                 user.Password=?"
         );
@@ -72,6 +72,7 @@ class User
 
     public static function create($email, $password, $displayName)
     {
+        $type_id = 1;
         $now = date_create()->format('Y-m-d H:i:s');
         $stmt = DatabaseConnection::getInstance()->prepare(
             "INSERT INTO user (
@@ -79,11 +80,17 @@ class User
                 email,
                 LastLogin,
                 SignupDate,
-                `Password`
-            ) VALUES (?, ?, ?, ?, ?)"
+                `Password`,
+                UserType_id
+            ) VALUES (?, ?, ?, ?, ?, ?)"
         );
 
-        $stmt->bind_param('sssss', $displayName, $email, $now, $now, $password);
+        $stmt->bind_param('sssssi', $displayName, $email, $now, $now, $password, $type_id);
         return $stmt->execute();
+    }
+
+    private static function getTypeId()
+    {
+
     }
 }

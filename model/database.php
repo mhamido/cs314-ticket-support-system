@@ -1,5 +1,7 @@
 <?php
 
+require_once '../config.php';
+
 class DatabaseConnection extends mysqli
 {
     private static $instance;
