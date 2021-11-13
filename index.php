@@ -38,12 +38,12 @@
                     </span>
 
                     <div class="wrap-input100 validate-input m-b-16" data-validate="Please enter your email">
-                        <input class="input100" type="text" name="email" placeholder="Email Address">
+                        <input class="input100" type="text" name="email" placeholder="Email Address" required>
                         <span class="focus-input100"></span>
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate="Please enter your password">
-                        <input class="input100" type="password" name="password" placeholder="Password">
+                        <input class="input100" type="password" name="password" placeholder="Password" required>
                         <span class="focus-input100"></span>
                     </div>
                     <br />
