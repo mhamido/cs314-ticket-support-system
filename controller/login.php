@@ -1,6 +1,8 @@
 <?php
 
+require_once '../errorPage.php';
 require_once '../validation.php';
+require_once '../model/user.php';
 require_once '../model/database.php';
 
 $errs = array();
@@ -16,7 +18,7 @@ if (isNullOrEmpty($password)) {
 }
 
 if (empty($errs)) {
-    echo "Attempted to login with $email and $password";
+    // echo "Attempted to login with $email and $password";
     $stmt = DatabaseConnection::getInstance()->prepare(
         "SELECT user.id FROM user
             WHERE user.email=? AND user.Password=?"
@@ -29,10 +31,12 @@ if (empty($errs)) {
         if ($result->num_rows === 1) {
             $id = $result->fetch_assoc()["id"];
             $usr = new User($id);
+        } else {
+            displayError(
+                array("User with email '$email' does not exist or attempted to login with incorrect credentials.")
+            );
         }
     }
 } else {
-    foreach ($errs as $err) {
-        echo "Error: $err <br>";
-    }
+    displayError($errs);
 }

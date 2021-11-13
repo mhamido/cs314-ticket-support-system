@@ -16,7 +16,7 @@ class User
         $result = $result->fetch_assoc();
 
         if (!$result) {
-            echo "User with $id not found.";
+            die("User with $id not found.");
             return;
         }
 
@@ -53,12 +53,17 @@ class User
 
     public static function login($email, $password)
     {
-        $stmt = "SELECT user.id WHERE user.email=$email AND user.Password=$password";
-        $result = DatabaseConnection::getInstance()->query($stmt);
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "SELECT user.id WHERE
+                user.email=? AND
+                user.Password=?"
+        );
+
+        $stmt->bind_param('ss', $email, $password);
+        $result = $stmt->execute();
 
         if (!$result) {
-            echo 'Invalid email/password.';
-            return;
+            return false;
         }
 
         $id = $result["id"];
