@@ -31,7 +31,7 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178" method="POST" action="controller/signup.php">
+				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178" method="POST" action="controller/signup.php" >
 					<span class="login100-form-title">
 						Sign Up
 					</span>
@@ -39,17 +39,17 @@
 						<input class="input100" type="text" name="DisplayName" placeholder="DisplayName" required>
 						<span class="focus-input100"></span><br>
 
-						<input class="input100" type="password" name="pass" placeholder="Password" required>
+						<input class="input100" type="password" name="Password" placeholder="Password" required>
 						<span class="focus-input100"></span><br>
 
-						<input class="input100" type="password" name="pass" placeholder="ConfirmPassword" required>
+						<input class="input100" type="password" name="ConfirmPassword" placeholder="ConfirmPassword" required>
 						<span class="focus-input100"></span><br>
 
-						<input class="input100" type="email" name="pass" placeholder="E_mail" required>
+						<input class="input100" type="email" name="e_mail" placeholder="E_mail" required>
 						<span class="focus-input100"></span><br>
 
 						<div class="container-login100-form-btn">
-							<button class="login100-form-btn">
+							<button id="demo" class="login100-form-btn" onclick="compare()">
 								Sign Up
 							</button>
 						</div><br>
@@ -66,6 +66,18 @@
 						
 					</div>
 				</form>
+				<script>
+        		function compare() 
+				{
+					document.getElementById("demo").innerHTML = "YOU CLICKED ME!";
+            		var passValue = document.getElementById("Password");
+            		var confpassValue = document.getElementById("ConfirmPassword");
+					if(passValue != confpassValue) 
+					{
+            		   window.alert("Passwords do not match!");
+            		}
+        		}
+    			</script>
 			</div>
 		</div>
 	</div>
