@@ -13,6 +13,7 @@ class User
     {
         $stmt = "SELECT * FROM user WHERE user.id=$id";
         $result = DatabaseConnection::getInstance()->query($stmt);
+        $result = $result->fetch_assoc();
 
         if (!$result) {
             echo "User with $id not found.";
@@ -27,6 +28,29 @@ class User
         $this->signupDate = $result["SignupDate"];
     }
 
+    public function update()
+    {
+        $last_login = $this->lastLogin->format('Y-m-d H:i:s');
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "UPDATE user SET 
+                DisplayName=?, 
+                email=?,
+                LastLogin=?,
+                `Password`=?"
+        );
+
+        $stmt->bind_param("ssss", $this->displayName, $this->email, $last_login, $this->password);
+        $stmt->execute();
+    }
+
+    public function delete()
+    {
+        $stmt = DatabaseConnection::getInstance()->prepare("DELETE FROM user WHERE user.id=?");
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+    }
+
+
     public static function login($email, $password)
     {
         $stmt = "SELECT user.id WHERE user.email=$email AND user.Password=$password";
@@ -36,12 +60,25 @@ class User
             echo 'Invalid email/password.';
             return;
         }
-        
+
         $id = $result["id"];
         return new User($id);
     }
 
-    public static function signup()
+    public static function create($email, $password, $displayName)
     {
+        $now = date_create()->format('Y-m-d H:i:s');
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "INSERT INTO user (
+                DisplayName,
+                email,
+                LastLogin,
+                SignupDate,
+                `Password`
+            ) VALUES (?, ?, ?, ?, ?)"
+        );
+
+        $stmt->bind_param('sssss', $displayName, $email, $now, $now, $password);
+        return $stmt->execute();
     }
 }
