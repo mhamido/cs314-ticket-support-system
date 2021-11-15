@@ -3,21 +3,23 @@
 
     class laundry extends housekeepingdecorator
     {
-        private $HouseKeeping;
+        public $numberofclothes;
+        public $laudryproducts;
+        private $housekeeping;
 
-        public function __construct($HouseKeeping)
+        public function __construct($housekeeping)
         {
-            $this->HouseKeeping=$HouseKeeping;
+            $this->housekeeping=$housekeeping;
         }
 
         public function description ()
         {
-
+            return "laundry serves"+ $this->housekeeping->description();
         }
         
         public function price ()
         {
-           
+            return 3 + $this->housekeeping->price();
         }
     }
 ?>

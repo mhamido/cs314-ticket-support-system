@@ -3,21 +3,23 @@
 
     class catering extends housekeepingdecorator
     {
-        private $HouseKeeping;
+        public $food;
+        public $softdrinks;
+        private $housekeeping;
 
-        public function __construct($HouseKeeping)
+        public function __construct($housekeeping)
         {
-            $this->HouseKeeping=$HouseKeeping;
+            $this->housekeeping=$housekeeping;
         }
 
         public function description ()
         {
-
+            return "catering serves"+ $this->housekeeping->description();
         }
         
         public function price ()
         {
-           
+            return 5 + $this->housekeeping->price();
         }
     }
 ?>

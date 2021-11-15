@@ -1,14 +1,7 @@
 <?php 
     abstract class housekeepingdecorator implements housekeeping
     {
-        public function description ()
-        {
-
-        }
-        
-        public function price ()
-        {
-           
-        }
+        abstract public function description ();
+        abstract public function price ();
     }
 ?>
