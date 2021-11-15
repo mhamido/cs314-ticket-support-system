@@ -5,7 +5,17 @@ require_once 'landscapingdecorator.php';
 
 class Trimmer{
 
+public $material;
+public $materialcost;
+
 private $landscape;
+
+public function trimgrass(){
+
+echo("trimmed grass");
+
+
+}
 
 public function __construct($landscape)
 {
