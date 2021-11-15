@@ -1,6 +1,9 @@
- <?php
+<?php
   interface Subject
     {
+          public function getState();
+         
+           public function setState($state);
           // Attach an observer to the subject.
           public function register( $observer);
  
