@@ -37,20 +37,28 @@
 						Sign Up
 					</span>
 
-					<input class="input100" type="text" name="DisplayName" placeholder="DisplayName" required>
-					<span class="focus-input100"></span><br>
+					<div class="wrap-input100 validate-input m-b-16" data-validate="Please enter your email">
+						<input class="input100" type="text" name="DisplayName" placeholder="DisplayName" required>
+						<span class="focus-input100"></span>
+					</div>
 
-					<input class="input100" type="password" name="Password" placeholder="Password" required>
-					<span class="focus-input100"></span><br>
+					<div class="wrap-input100 validate-input m-b-16" data-validate="Please enter your email">
+						<input class="input100" type="password" name="Password" placeholder="Password" required>
+						<span class="focus-input100"></span>
+					</div>
 
-					<input class="input100" type="password" name="ConfirmPassword" placeholder="ConfirmPassword" required>
-					<span class="focus-input100"></span><br>
+					<div class="wrap-input100 validate-input m-b-16" data-validate="Please enter your email">
+						<input class="input100" type="password" name="ConfirmPassword" placeholder="ConfirmPassword" required>
+						<span class="focus-input100"></span>
+					</div>
 
-					<input class="input100" type="email" name="e_mail" placeholder="E_mail" required>
-					<span class="focus-input100"></span><br>
+					<div class="wrap-input100 validate-input m-b-16" data-validate="Please enter your email">
+						<input class="input100" type="email" name="e_mail" placeholder="E_mail" required>
+						<span class="focus-input100"></span>
+					</div>
 
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn" onclick="compare()">
+						<button class="login100-form-btn">
 							Sign Up
 						</button>
 					</div><br>
@@ -65,19 +73,21 @@
 						</a>
 					</div>
 
-			</div>
-			</form>
-			<script>
-				function compare() {
-					var passValue = document.getElementById("Password");
-					var confpassValue = document.getElementById("ConfirmPassword");
-					if (passValue != confpassValue) {
-						window.alert("Passwords do not match!");
+				</form>
+				<script>
+					function compare() 
+					{
+						var passValue = document.getElementById("Password");
+						var confpassValue = document.getElementById("ConfirmPassword");
+						if (passValue != confpassValue) 
+						{
+							window.alert("Passwords do not match!");
+							return true;
+						}
 					}
-				}
-			</script>
+				</script>
+			</div>
 		</div>
-	</div>
 	</div>
 </body>
 
