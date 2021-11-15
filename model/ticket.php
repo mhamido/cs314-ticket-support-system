@@ -1,6 +1,6 @@
 <?php
-
-class Ticket
+require_once'subject.php';
+class Ticket implements Subject
 {
     private $id;
     private $unit;
@@ -12,10 +12,12 @@ class Ticket
     private $description;
     private $dateCreated;
     private $comments;
+    private $observers;
     // private $assignee;
 
     public function __construct($id)
     {
+         $this->observers = new \SplObjectStorage();
         $stmt = DatabaseConnection::getInstance()->prepare(
             "SELECT * FROM ticket WHERE ticket.T_id=?"
         );
@@ -80,5 +82,22 @@ class Ticket
 
         $stmt->bind_param('i', $this->id);
         return $stmt->execute();
+    }
+     public function register( $observer): void
+    {
+        echo "Subject: Attached an observer.\n";
+        $this->observers->attach($observer);
+    }
+    public function remove( $observer): void
+    {
+        $this->observers->detach($observer);
+        echo "Subject: Detached an observer.\n";
+    }
+    public function notify(): void
+    {
+        echo "Subject: Notifying observers...\n";
+        foreach ($this->observers as $observer) {
+            $observer->update($this);
+        }
     }
 }
