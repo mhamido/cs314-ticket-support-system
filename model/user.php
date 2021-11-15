@@ -2,12 +2,12 @@
 
 class User
 {
-    private $id;
-    private $email;
-    private $password;
-    private $lastLogin;
-    private $signupDate;
-    private $displayName;
+    public $id;
+    public $email;
+    public $password;
+    public $lastLogin;
+    public $signupDate;
+    public $displayName;
 
     public function __construct($id)
     {

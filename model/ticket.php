@@ -2,16 +2,16 @@
 
 class Ticket
 {
-    private $id;
-    private $unit;
-    private $title;
-    private $status;
-    private $service;
-    private $priority;
-    private $author;
-    private $description;
-    private $dateCreated;
-    private $comments;
+    public $id;
+    public $unit;
+    public $title;
+    public $status;
+    public $service;
+    public $priority;
+    public $author;
+    public $description;
+    public $dateCreated;
+    public $comments;
     // private $assignee;
 
     public function __construct($id)
@@ -49,7 +49,7 @@ class Ticket
         $this->comments = array();
 
         while ($commentID = $result->fetch_row()) {
-            $this->comments[] = new Comment($commentID);
+            // $this->comments[] = new Comment($commentID);
         }
     }
 
