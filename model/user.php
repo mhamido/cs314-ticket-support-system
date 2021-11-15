@@ -19,7 +19,7 @@ class User
 
         $stmt->bind_param('i', $id);
         $result = $stmt->execute();
-        
+
         if (!$result) {
             die("User with $id not found.");
             return;
@@ -57,6 +57,32 @@ class User
         $stmt->execute();
     }
 
+    public function getVisibleTickets()
+    {
+        // TODO: `user` should probably only see
+        // tickets that they've created.
+        $tickets = array();
+
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "SELECT T_id FROM ticket"
+        );
+
+        // $stmt->bind_param('s', $this->id);
+
+        $result = $stmt->execute();
+
+        if (!$result) {
+            return $tickets;
+        }
+
+        $result = $stmt->get_result();
+
+        while ($row = $result->fetch_assoc()) {
+            $tickets[] = new Ticket($row["T_id"]);
+        }
+
+        return $tickets;
+    }
 
     public static function login($email, $password)
     {
@@ -72,6 +98,8 @@ class User
         if (!$result) {
             return false;
         }
+
+        $result = $stmt->get_result()->fetch_assoc();
 
         $obj = new User(false);
         $obj->id = $result["id"];
@@ -103,8 +131,25 @@ class User
         return $stmt->execute();
     }
 
-    private static function getTypeId()
+    public function createTicket($unit, $title, $service, $description)
     {
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "INSERT INTO ticket (
+                unit,
+                title,
+                S_id,
+                P_id,
+                `description`,
+                create_date,
+                Author_id
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)"
+        );
 
+        $stmt->bind_param('isiissi',
+            $unit,
+            $title,
+            // $service,
+            $status
+        );
     }
 }

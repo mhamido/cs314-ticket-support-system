@@ -9,53 +9,76 @@ class Ticket
     private $service;
     private $priority;
     private $author;
-    // private $assignee;
     private $description;
     private $dateCreated;
     private $comments;
+    // private $assignee;
 
     public function __construct($id)
     {
-        $query = "SELECT * FROM ticket WHERE ticket.T_id = $id";
-        $result = DatabaseConnection::getInstance()->query($query);
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "SELECT * FROM ticket WHERE ticket.T_id=?"
+        );
 
-        // TODO: Create if not exists.
-        foreach ($result as $obj) {
-            $this->id = $obj["id"];
-            $this->unit = $obj["unit"];
-            // $this->title = $obj["title"];
-            // $this->status = $obj["status"];
-            // $this->service = $obj["service"];
-            // $this->priority = $obj["id"];
-            // $this->author
-            $this->description = $obj["description"];
-            $this->dateCreated = $obj["create_date"];
+        $stmt->bind_param('s', $id);
+        $result = $stmt->execute();
+
+        if (!$result) return;
+
+        $result = $stmt->get_result()->fetch_assoc();
+
+        if (!$result) return;
+
+        $this->id = $result["id"];
+        $this->unit = $result["unit"];
+
+        throw new Exception("TODO:");
+
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "SELECT * FROM ticketcomment WHERE ..."
+        );
+
+        $stmt->bind_param('s', $id);
+
+        $result = $stmt->execute();
+
+        if (!$result) return;
+
+        $result = $stmt->get_result();
+
+        $this->comments = array();
+
+        while ($commentID = $result->fetch_row()) {
+            $this->comments[] = new Comment($commentID);
         }
     }
 
     public function update()
     {
-        $query = "UPDATE ticket SET ticket.unit=?, ticket.title=?, ticket.description=?, ticket.create_date=?";
-        $result = DatabaseConnection::getInstance()->query($query);
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "UPDATE ticket SET 
+                ticket.unit=?,
+                ticket.title=?,
+                ticket.description=?"
+        );
 
-        
+        $stmt->bind_param(
+            'ssss',
+            $this->unit,
+            $this->title,
+            $this->description
+        );
+
+        return $stmt->execute();
     }
 
-    public static function fetchAll()
+    public function delete()
     {
-        $tickets = array();
-        // Fetch tickets, most recently created first.
-        $fetchStmt = "SELECT ticket.T_id FROM ticket ORDER BY ticket.create_date DESC";
-        $result = DatabaseConnection::getInstance()->query($fetchStmt);
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "DELETE FROM ticket WHERE ticket.T_id = ?"
+        );
 
-        if (!$result) {
-            return $tickets;
-        }
-
-        foreach ($result as $id) {
-            $tickets[] = new Ticket($id);
-        }
-
-        return $tickets;
+        $stmt->bind_param('i', $this->id);
+        return $stmt->execute();
     }
 }
