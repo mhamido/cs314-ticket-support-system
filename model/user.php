@@ -1,6 +1,6 @@
 <?php
-
-class User
+require_once 'observer.php';
+class User implements Observer
 {
     private $id;
     private $email;
@@ -35,6 +35,13 @@ class User
         $this->signupDate = $result["SignupDate"];
     }
 
+
+    public function updateObserver($subject): void
+    {
+        
+    }
+
+    
     public function update()
     {
         $last_login = $this->lastLogin->format('Y-m-d H:i:s');
