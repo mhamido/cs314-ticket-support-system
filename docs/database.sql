@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 15, 2021 at 09:28 PM
+-- Generation Time: Nov 15, 2021 at 10:17 PM
 -- Server version: 5.7.31
 -- PHP Version: 7.3.21
 
@@ -174,7 +174,8 @@ ALTER TABLE `ticket`
   ADD CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`S_id`) REFERENCES `status` (`S_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `ticket_ibfk_2` FOREIGN KEY (`P_id`) REFERENCES `priority` (`P_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `ticket_ibfk_3` FOREIGN KEY (`C_id`) REFERENCES `comment` (`C_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `ticket_ibfk_4` FOREIGN KEY (`Attachment_id`) REFERENCES `attachment` (`Attachment_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `ticket_ibfk_4` FOREIGN KEY (`Attachment_id`) REFERENCES `attachment` (`Attachment_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ticket_ibfk_5` FOREIGN KEY (`Author_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `user`
