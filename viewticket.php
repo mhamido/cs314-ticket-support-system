@@ -50,6 +50,9 @@
 					<label for="description">Description:</label><br>
 					<input class="input100" type="text" name="description" placeholder="<?php echo($ticket->unit); ?>" required>
 
+					<label for="myfile">Add A Comment:</label><br>
+					<input class="input100" type="text" name="comment" placeholder="comment">
+
 					<label for="myfile">Select a file:</label><br>
 					
 					<label for="myfile">The serves for this ticket:</label><br>
