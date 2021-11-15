@@ -27,7 +27,7 @@ public function price(){
 }
 
 public function description(){
-    return "Pesticide;"+ $this->landscape->price();
+    return "Pesticide;"+ $this->landscape->description();
 } 
 
 

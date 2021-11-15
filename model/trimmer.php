@@ -29,7 +29,7 @@ public function price(){
 }
 
 public function description(){
-    return "Trimming;"+ $this->landscape->price();
+    return "Trimming;"+ $this->landscape->description();
 }
 
 

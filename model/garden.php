@@ -38,7 +38,7 @@ public function price(){
 }
 
 public function description(){
-    return "Gardening;"+ $this->landscape->price();
+    return "Gardening;"+ $this->landscape->description();
 }
 
 
