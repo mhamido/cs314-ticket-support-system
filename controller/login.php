@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once '../errorPage.php';
 require_once '../validation.php';
@@ -31,6 +32,7 @@ if (empty($errs)) {
         if ($result->num_rows === 1) {
             $id = $result->fetch_assoc()["id"];
             $usr = new User($id);
+            $_SESSION["user"] = $usr;
         } else {
             displayError(
                 array("User with email '$email' does not exist or attempted to login with incorrect credentials.")

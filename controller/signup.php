@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once '../errorPage.php';
 require_once '../validation.php';
@@ -30,15 +31,13 @@ if (empty($errs)) {
     $stmt->bind_param('s', $email);
     $result = $stmt->execute();
 
-    var_dump($result);
-
     if ($result) {
         $result = $stmt->get_result();
-        var_dump($result);
         if ($result->num_rows === 0) {
             User::create($email, $password, $displayName);
             $usr = User::login($email, $password);
-            var_dump($usr);
+            $_SESSION["user"] = $usr;
+            header("Location: index.php");
         } else {
             displayError(array(
                 "User with email '$email' already exists."
