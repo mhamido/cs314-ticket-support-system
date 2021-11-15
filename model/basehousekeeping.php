@@ -1,17 +1,20 @@
 <?php 
-    require_once "housekeepingdecorator.php";
+require_once "housekeepingdecorator.php";
 
-    class basehousekeeping extends housekeeping
+class BaseHousekeeping extends Housekeeping
+{
+    public function description()
     {
-
-        function description ()
-        {
-            return "Housekeeping fees";
-        }
-        
-        function price ()
-        {
-           return 0.5 + $this->housekeeping->price();
-        }
+        return "Base Housekeeping Fees";
     }
-?>
+    
+    public function price()
+    {
+        return 0.5 + $this->housekeeping->price();
+    }
+
+    public function perform()
+    {
+        throw new Exception("TODO:");
+    }
+}

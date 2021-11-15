@@ -6,7 +6,7 @@
 <html lang="en">
 
 <head>
-	<title>Compound Help Desk System - Signup</title>
+	<title>Compound Help Desk System - Viewing <?php echo($ticket->id); ?> </title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
@@ -36,7 +36,7 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178" method="POST" action="controller/viewallticket.php">
+				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178" method="POST" action="controller/manageTicket.php">
 					<span class="login100-form-title">
 						View Ticket: <?php echo($ticket->id); ?>
 					</span>
@@ -52,16 +52,16 @@
 
 					<label for="myfile">Select a file:</label><br>
 					
-					<label for="myfile">The serves for this tecket:</label><br>
-					<label for="unit"><?php echo($ticket->service->description());?></label>
+					<label for="myfile">The serves for this ticket:</label><br>
+					<label for="unit"><?php echo($ticket->service->description()); ?></label>
 					
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn" onClick="createticket()">
+						<button name="edit" class="login100-form-btn" onClick="createticket()">
 							Edit
 						</button>
 					</div><br>
 					<div class="container-login100-form-btn">
-						<button class="login100-form-btn" onClick="createticket()" style="background-color: #f44336">
+						<button name="delete" class="login100-form-btn" onClick="createticket()" style="background-color: #f44336">
 							Delete
 						</button>
 					</div><br>

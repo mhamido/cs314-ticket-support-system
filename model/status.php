@@ -32,14 +32,4 @@ class Status
     {
         return $this->name;
     }
-
-    public static function create($name)
-    {
-        
-    }
-
-    public static function delete($name)
-    {
-
-    }
 }

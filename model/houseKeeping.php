@@ -2,17 +2,9 @@
 
 require_once 'service.php';
 
-class HouseKeeping implements Service{
-
-  public function price(){
-    return;
-
-  }
-    public function perform(){
-      return;
-    }
-    public function description(){
-      return;
-    }
+abstract class HouseKeeping implements Service
+{
+  public abstract function price();
+  public abstract function perform();
+  public abstract function description();
 }
- ?> 

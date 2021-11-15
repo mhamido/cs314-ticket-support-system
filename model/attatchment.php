@@ -1,15 +1,12 @@
 <?php
 
 
-class Attachment{
+class Attachment
+{
+    public $id;
+    public $url;
 
-
-    private $id;
-    private $url;
-  
-
-
-public function __construct($id)
+    public function __construct($id)
     {
         if (!$id) return;
 
@@ -19,7 +16,7 @@ public function __construct($id)
 
         $stmt->bind_param('i', $id);
         $result = $stmt->execute();
-        
+
         if (!$result) {
             die("Attachment with $id not found.");
             return;
@@ -29,7 +26,6 @@ public function __construct($id)
 
         $this->id = $id;
         $this->url = $result["URL"];
-        
     }
 
     public function update()
@@ -38,19 +34,19 @@ public function __construct($id)
         $stmt = DatabaseConnection::getInstance()->prepare(
             "UPDATE attachment SET 
                 `URL`=?, "
-              
         );
 
         $stmt->bind_param("s", $this->url);
-        $stmt->execute();
+        return $stmt->execute();
     }
 
     public function delete()
     {
         $stmt = DatabaseConnection::getInstance()->prepare("DELETE FROM attachment WHERE  Attachment_id=?");
         $stmt->bind_param("i", $this->id);
-        $stmt->execute();
+        return $stmt->execute();
     }
+
     public static function create($url)
     {
         $type_id = 1;
@@ -64,10 +60,4 @@ public function __construct($id)
         $stmt->bind_param('s', $url);
         return $stmt->execute();
     }
-
 }
-
-
-
-
-?>

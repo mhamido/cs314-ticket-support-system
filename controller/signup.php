@@ -37,7 +37,7 @@ if (empty($errs)) {
             User::create($email, $password, $displayName);
             $usr = User::login($email, $password);
             $_SESSION["user"] = $usr;
-            header("Location: index.php");
+            header("Location: ../index.php");
         } else {
             displayError(array(
                 "User with email '$email' already exists."

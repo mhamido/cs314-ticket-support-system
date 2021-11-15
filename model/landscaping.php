@@ -1,7 +1,7 @@
 <?php
 require_once 'service.php';
-class LandScaping implements Service{
-    
+class LandScaping implements Service
+{
     public function price()
     {
         return;
@@ -10,11 +10,10 @@ class LandScaping implements Service{
     {
       return;
     }
+
     public function description()
     {
-     return;
+      return;
     }
 
 }
-
-?>

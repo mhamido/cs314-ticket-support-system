@@ -1,6 +1,5 @@
-  <?php
-  interface Observer
-    {
-         public function updateObserver($subject);
-      }
-  ?>
+<?php
+interface Observer
+{
+    public function updateObserver($subject);
+}

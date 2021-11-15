@@ -33,6 +33,7 @@ if (empty($errs)) {
             $id = $result->fetch_assoc()["id"];
             $usr = new User($id);
             $_SESSION["user"] = $usr;
+            header("Location: ../view/viewall.php");
         } else {
             displayError(
                 array("User with email '$email' does not exist or attempted to login with incorrect credentials.")

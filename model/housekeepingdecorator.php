@@ -1,7 +1,7 @@
 <?php 
-    abstract class housekeepingdecorator implements housekeeping
-    {
-        abstract public function description ();
-        abstract public function price ();
-    }
-?>
+require_once 'houseKeeping.php';
+abstract class HousekeepingDecorator extends Housekeeping
+{
+    abstract public function price();
+    abstract public function description();
+}

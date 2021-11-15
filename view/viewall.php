@@ -1,7 +1,11 @@
 <?php
+require_once '../model/user.php';
+require_once '../model/database.php';
 session_start();
+
 $user = $_SESSION["user"];
-$ticket = $user->getVisibleTickets();
+$tickets = $user->getVisibleTickets();
+// var_dump($user);
 ?>
 
 <!DOCTYPE html>
@@ -20,14 +24,10 @@ $ticket = $user->getVisibleTickets();
 
 <body>
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-
-
   </a>
-
   <div class="d-flex justify-content-between align-items-center">
     <div><i class="fa fa-tag mr-1 text-muted"></i>
       <div class="d-inline-block font-weight-medium text-uppercase">My Tickets</div>
-
     </div>
     </a>
     </nav>
@@ -44,24 +44,25 @@ $ticket = $user->getVisibleTickets();
           <th>Ticket Title</th>
           <th>Date Issued</th>
           <th>Status</th>
-
+          <th>Priority</th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($tickets as $ticket) { ?>
-
           <tr>
             <td><a class="navi-link" href="createticket.php" data-toggle="modal">7<?php echo ($ticket->id) ?></a></td>
             <td><?php echo ($ticket->title) ?></td>
             <td><?php echo ($ticket->dateCreated) ?></td>
-            <td><span class="badge badge-danger m-0"><?php echo ($ticket->status) ?></span></td>
+            <td><span class="badge badge-danger m-0"><?php echo ($ticket->status->name()) ?></span></td>
+            <td><<span class="badge badge-danger m-0"><?php echo ($ticket->priority->name()) ?></span></td>
           </tr>
         <?php  } ?>
-
       </tbody>
 
     </table>
-    <button class="button button1">Create Ticket</button>
+    <form action="../createticket.php" method="post">
+      <button class="button button1">Create Ticket</button>
+    </form>
   </div>
   </div>
   </div>

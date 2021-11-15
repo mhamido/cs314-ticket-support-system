@@ -32,7 +32,7 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178" method="POST" action="controller/viewallticket.php">
+				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178" method="POST" action="controller/createTicket.php">
 					<span class="login100-form-title">
 						New Ticket
 					</span>
@@ -51,22 +51,22 @@
 
 					<label for="myfile">Choose your services:</label><br>
 					
-					<input type="checkbox" id="landscaping">
-					<label> Landscaping</label><br>
-					<input type="checkbox" id="housekeeping">
-					<label> housekeeping</label><br>
-					<input type="checkbox" id="pesticide">
-					<label> pesticide</label><br>
-					<input type="checkbox" id="trimmer">
-					<label> trimmer</label><br>
-					<input type="checkbox" id="garden">
-					<label> garden</label><br>
-					<input type="checkbox" id="cleaning">
-					<label> cleaning</label><br>
-					<input type="checkbox" id="laundry">
-					<label> laundry</label><br>
-					<input type="checkbox" id="catering">
-					<label> catering</label><br>
+					<input type="checkbox" name="landscaping" id="landscaping">
+					<label>Landscaping</label><br>
+					<input type="checkbox" name="housekeeping" id="housekeeping">
+					<label>Housekeeping</label><br>
+					<input type="checkbox" name="pesticide" id="pesticide">
+					<label>Pesticide</label><br>
+					<input type="checkbox" name="trimmer" id="trimmer">
+					<label>Trimmer</label><br>
+					<input type="checkbox" name="garden" id="garden">
+					<label>Garden</label><br>
+					<input type="checkbox" name="cleaning" id="cleaning">
+					<label>Cleaning</label><br>
+					<input type="checkbox" name="laundry" id="laundry">
+					<label>Laundry</label><br>
+					<input type="checkbox" name="catering" id="catering">
+					<label>Catering</label><br>
 
 					<div class="container-login100-form-btn">
 						<button class="login100-form-btn" onClick="createticket()">
@@ -98,7 +98,7 @@
 							Want to cancel?
 						</span>
 
-						<a href="viewallticket.php" class="txt3" onClick="cancelticket()">
+						<a href="view/viewall.php" class="txt3" onClick="cancelticket()">
 							Cancel
 						</a>
 					</div>
