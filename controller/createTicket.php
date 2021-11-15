@@ -4,6 +4,13 @@ require_once '../model/database.php';
 require_once '../model/BaseLandscape.php';
 require_once '../model/basehousekeeping.php';
 
+require_once '../model/laundry.php';
+require_once '../model/catering.php';
+require_once '../model/cleaning.php';
+require_once '../model/garden.php';
+require_once '../model/trimmer.php';
+require_once '../model/pesticide.phpphp';
+
 session_start();
 
 
@@ -59,7 +66,7 @@ if ($canCreateTicket) {
     );
 
     $_SESSION["ticket"] = $ticket;
-    header('Location: ../viewticket.php')
+    header('Location: ../viewticket.php');
 }
 
 

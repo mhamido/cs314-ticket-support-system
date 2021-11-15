@@ -84,7 +84,7 @@ class Ticket implements Subject
     }
     
     
-      public function getState() {
+    public function getState() {
         return $this->state;
     }
 
@@ -93,20 +93,20 @@ class Ticket implements Subject
         $this->notify();
     }
 
-    public function register( $observer)
+    public function register($observer)
     {
         array_push($this->observers, $observer);
     }
+
     public function remove( $observer)
     {
-       array_pop($this->observers, $observer);
+        array_pop($this->observers, $observer);
     }
+    
     public function notify()
     {
         foreach ($this->observers as $obs){
             $obs->update();
         }
-    }
-   
     }
 }
