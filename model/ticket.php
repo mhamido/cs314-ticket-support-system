@@ -13,7 +13,8 @@ class Ticket implements Subject
     public $dateCreated;
     public $comments;
     // private $assignee;
-    public $observers;
+    private $observers = array();
+    
 
     public function __construct($id)
     {
@@ -81,21 +82,31 @@ class Ticket implements Subject
         $stmt->bind_param('i', $this->id);
         return $stmt->execute();
     }
-
-    public function register($observer)
-    {
-        $this->observers[] = $observer;
+    
+    
+      public function getState() {
+        return $this->state;
     }
 
-    public function remove($observer)
-    {
-        $this->observers[] = $observer;
+    public function setState($state) {
+        $this->state = $state;
+        $this->notify();
     }
 
+    public function register( $observer)
+    {
+        array_push($this->observers, $observer);
+    }
+    public function remove( $observer)
+    {
+       array_pop($this->observers, $observer);
+    }
     public function notify()
     {
-        foreach ($this->observers as $observer) {
-            $observer->update($this);
+        foreach ($this->observers as $obs){
+            $obs->update();
         }
+    }
+   
     }
 }

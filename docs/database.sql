@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 13, 2021 at 09:45 PM
+-- Generation Time: Nov 15, 2021 at 10:17 PM
 -- Server version: 5.7.31
 -- PHP Version: 7.3.21
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `project database`
+-- Database: `database`
 --
 
 -- --------------------------------------------------------
@@ -46,7 +46,9 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `Author` int(11) NOT NULL,
   `creationDate` datetime NOT NULL,
   `body` varchar(2000) NOT NULL,
-  PRIMARY KEY (`C_id`)
+  `T_id` int(11) NOT NULL,
+  PRIMARY KEY (`C_id`),
+  KEY `T_id` (`T_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -110,23 +112,14 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `description` varchar(2000) NOT NULL,
   `create_date` datetime NOT NULL,
   `C_id` int(11) NOT NULL,
+  `Author_id` int(11) NOT NULL,
+  `Attachment_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`T_id`),
   KEY `S_id` (`S_id`,`P_id`,`C_id`),
   KEY `P_id` (`P_id`),
-  KEY `C_id` (`C_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `ticketcomment`
---
-
-DROP TABLE IF EXISTS `ticketcomment`;
-CREATE TABLE IF NOT EXISTS `ticketcomment` (
-  `T_id` int(11) NOT NULL,
-  `C_id` int(11) NOT NULL,
-  KEY `C_id` (`C_id`)
+  KEY `C_id` (`C_id`),
+  KEY `Author_id` (`Author_id`),
+  KEY `Attachment_id` (`Attachment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -180,13 +173,9 @@ INSERT INTO `usertype` (`id`, `Name`) VALUES
 ALTER TABLE `ticket`
   ADD CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`S_id`) REFERENCES `status` (`S_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `ticket_ibfk_2` FOREIGN KEY (`P_id`) REFERENCES `priority` (`P_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `ticket_ibfk_3` FOREIGN KEY (`C_id`) REFERENCES `comment` (`C_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `ticketcomment`
---
-ALTER TABLE `ticketcomment`
-  ADD CONSTRAINT `ticketcomment_ibfk_1` FOREIGN KEY (`C_id`) REFERENCES `comment` (`C_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `ticket_ibfk_3` FOREIGN KEY (`C_id`) REFERENCES `comment` (`C_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ticket_ibfk_4` FOREIGN KEY (`Attachment_id`) REFERENCES `attachment` (`Attachment_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ticket_ibfk_5` FOREIGN KEY (`Author_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `user`
