@@ -37,20 +37,35 @@
 						New Ticket
 					</span>
 
-					<label for="fname">Unit:</label>
+					<label for="unit">Unit:</label>
 					<input class="input100" type="text" name="unit" placeholder="Unit" required>
 
-					<label for="fname">Title:</label><br>
+					<label for="title">Title:</label><br>
 					<input class="input100" type="text" name="title" placeholder="Title" required>
 
-					<label for="lname">Description:</label><br>
+					<label for="description">Description:</label><br>
 					<input class="input100" type="text" name="description" placeholder="Description" required>
+
+					<label for="priority">Priority:</label><br>
+					<select name="priority" id="priority">
+						<option value="1">Low</option>
+						<option value="2">Medium</option>
+						<option value="3">High</option>
+					</select><br><br>
+
+					<label for="status">Status:</label><br>
+					<select name="status" id="status">
+						<option value="1">New</option>
+						<option value="3">On Hold</option>
+						<option value="4">In Progress</option>
+						<option value="13">Resolved</option>
+					</select><br><br>
 
 					<label for="myfile">Select a file:</label>
 					<input type="file" id="myfile" name="myfile"><br><br>
 
 					<label for="myfile">Choose your services:</label><br>
-					
+
 					<input type="checkbox" name="landscaping" id="landscaping">
 					<label>Landscaping</label><br>
 					<input type="checkbox" name="housekeeping" id="housekeeping">
@@ -119,55 +134,51 @@
 	*/
 </script>
 <style type="text/css">
-	#pesticide
-	{
+	#pesticide {
 		display: none;
 	}
-	#trimmer
-	{
-		display: none;
-	}
-	#garden
-	{
-		display: none;
-	}	
 
-	#landscaping:checked~#pesticide
-	{
-		display: block;
-	}
-	#landscaping:checked~#trimmer
-	{
-		display: block;
-	}
-	#landscaping:checked~#garden
-	{
-		display: block;
-	}
-	
-	#cleaning
-	{
+	#trimmer {
 		display: none;
 	}
-	#laundry
-	{
-		display: none;
-	}
-	#catering
-	{
-		display: none;
-	}	
 
-	#housekeeping:checked~#cleaning	
-	{
+	#garden {
+		display: none;
+	}
+
+	#landscaping:checked~#pesticide {
 		display: block;
 	}
-	#housekeeping:checked~#laundry
-	{
+
+	#landscaping:checked~#trimmer {
 		display: block;
 	}
-	#housekeeping:checked~#catering
-	{
+
+	#landscaping:checked~#garden {
+		display: block;
+	}
+
+	#cleaning {
+		display: none;
+	}
+
+	#laundry {
+		display: none;
+	}
+
+	#catering {
+		display: none;
+	}
+
+	#housekeeping:checked~#cleaning {
+		display: block;
+	}
+
+	#housekeeping:checked~#laundry {
+		display: block;
+	}
+
+	#housekeeping:checked~#catering {
 		display: block;
 	}
 </style>
