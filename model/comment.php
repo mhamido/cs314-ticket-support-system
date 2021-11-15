@@ -21,7 +21,32 @@ public function __construct($id)
         }
     }
 
-    
+    public function update()
+    {
+        $query = "UPDATE comment SET comment.Author=?, ticket.creationDate=?, ticket.body=?,T_id=?";
+        $result = DatabaseConnection::getInstance()->query($query);//singleton
+
+
+    }
+
+    public static function create()
+    {
+        $Allcomments = array();
+        $Stmt = "SELECT comment.C_id FROM comment ORDER BY ticket.creationDate DESC";
+        $result = DatabaseConnection::getInstance()->query($Stmt);
+
+
+    }
+    public function delete()
+    {
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "DELETE FROM comment WHERE comment.C_id = ?"
+        );
+
+        $stmt->bind_param('i', $this->id);
+        return $stmt->execute();
+    }
+
 
     
 }
