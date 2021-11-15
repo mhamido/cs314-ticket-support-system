@@ -36,7 +36,7 @@ class User implements Observer
     }
 
 
-    public function updateObserver($subject): void
+    public function updateObserver():
     {
         
     }
