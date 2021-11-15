@@ -110,7 +110,7 @@
 </body>
 <script type="text/javascript">
 	function cancelticket() {
-		alert("Your Ticket has been canceled");
+		alert("Your Ticket has been cancelled");
 	}
 	/*
 	function createticket() {
