@@ -1,6 +1,6 @@
 <?php
-
-class Ticket
+require_once 'subject.php';
+class Ticket implements Subject
 {
     public $id;
     public $unit;
@@ -13,9 +13,11 @@ class Ticket
     public $dateCreated;
     public $comments;
     // private $assignee;
+    public $observers;
 
     public function __construct($id)
     {
+        $this->observers = array();
         $stmt = DatabaseConnection::getInstance()->prepare(
             "SELECT * FROM ticket WHERE ticket.T_id=?"
         );
@@ -31,8 +33,6 @@ class Ticket
 
         $this->id = $result["id"];
         $this->unit = $result["unit"];
-
-        throw new Exception("TODO:");
 
         $stmt = DatabaseConnection::getInstance()->prepare(
             "SELECT * FROM ticketcomment WHERE ..."
@@ -80,5 +80,22 @@ class Ticket
 
         $stmt->bind_param('i', $this->id);
         return $stmt->execute();
+    }
+
+    public function register($observer)
+    {
+        $this->observers[] = $observer;
+    }
+
+    public function remove($observer)
+    {
+        $this->observers[] = $observer;
+    }
+
+    public function notify()
+    {
+        foreach ($this->observers as $observer) {
+            $observer->update($this);
+        }
     }
 }
