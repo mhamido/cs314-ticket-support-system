@@ -29,16 +29,27 @@ class User implements Observer
 
         $this->id = $id;
         $this->displayName = $result["DisplayName"];
-        $this->email = $result["email"];
+        $this->email = $result["email"];    
         $this->password = $result["Password"];
         $this->lastLogin = $result["LastLogin"];
         $this->signupDate = $result["SignupDate"];
     }
 
 
-    public function send($observer)
+    public function send($ticket)
     {
-        
+        // mail(
+        //     $this->email, 
+        //     "Ticket ($ticket->id) has been updated.",
+        //     "Hello $this->displayName, the ticket titled '$ticket->title' has been updated."
+        // );
+
+        $now = date('Y-m-d-H-i-s');
+        $fileName = "$this->email-$now";
+        $file = fopen("../mail/$fileName", 'w');
+        // fwrite($file, "Hello $this->displayName, the ticket titled '$ticket->title' has been updated.");
+        fwrite($file, "Hello $this->displayName, the ticket titled '' has been updated.");
+        fclose($file);
     }
 
     

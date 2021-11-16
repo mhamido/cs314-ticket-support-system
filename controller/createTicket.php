@@ -9,7 +9,7 @@ require_once '../model/catering.php';
 require_once '../model/cleaning.php';
 require_once '../model/garden.php';
 require_once '../model/trimmer.php';
-require_once '../model/pesticide.phpphp';
+require_once '../model/pesticide.php';
 
 session_start();
 

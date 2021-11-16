@@ -33,6 +33,7 @@ if (empty($errs)) {
             $id = $result->fetch_assoc()["id"];
             $usr = new User($id);
             $_SESSION["user"] = $usr;
+            $usr->send(NULL);
             header("Location: ../view/viewall.php");
         } else {
             displayError(
