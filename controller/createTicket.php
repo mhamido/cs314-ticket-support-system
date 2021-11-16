@@ -65,6 +65,8 @@ if ($canCreateTicket) {
         $description
     );
 
+    $ticket->register($user);
+
     $_SESSION["ticket"] = $ticket;
     header('Location: ../viewticket.php');
 }

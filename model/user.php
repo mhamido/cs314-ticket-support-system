@@ -36,7 +36,7 @@ class User implements Observer
     }
 
 
-    public function updateObserver():
+    public function send($observer)
     {
         
     }

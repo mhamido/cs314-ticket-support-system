@@ -26,6 +26,7 @@ if (isset($description))
 
 if ($edit) {
     $ticket->update();
+    $ticket->notify();
 } elseif ($delete) {
     $ticket->delete();
 }

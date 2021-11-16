@@ -56,9 +56,9 @@ $tickets = $user->getVisibleTickets();
             <?php if ($ticket->status->id === 13) { ?>
             <td><span class="badge badge-danger m-0"><?php echo ($ticket->status->name()) ?></span></td>
             <?php } elseif ($ticket->status->id === 3 || $ticket->status->id === 4) { ?>
-            <td><<span class="badge badge-success m-0"><?php echo ($ticket->status->name()) ?></span></td>
-            <?php } else { ?>
               <td><span class="badge badge-info m-0"><?php echo ($ticket->status->name()) ?></span></td>
+            <?php } else { ?>
+                <td><<span class="badge badge-success m-0"><?php echo ($ticket->status->name()) ?></span></td>
             <?php } ?>
 
             <?php if ($ticket->priority->id === 3 ) { ?>

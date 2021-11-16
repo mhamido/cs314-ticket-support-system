@@ -14,7 +14,7 @@ class Ticket implements Subject
     public $comments;
     // private $assignee;
     private $observers = array();
-    
+
 
     public function __construct($id)
     {
@@ -82,33 +82,25 @@ class Ticket implements Subject
         $stmt->bind_param('i', $this->id);
         return $stmt->execute();
     }
-    
-    
-
 
     public function register($observer)
     {
-       $this->observers[]=$observer;
+        $this->observers[] = $observer;
     }
 
     public function remove($observer)
     {
-        $i=0;
-        foreach ($this->observers as $current){
-
-        if($current===$observer)
-           unset($observers[$i]);
-
-
-        
-           $i++;
+        $i = 0;
+        foreach ($this->observers as $current) {
+            if ($current === $observer)
+                unset($observers[$i]);
+            $i++;
         }
-      
     }
-    
+
     public function notify()
     {
-        foreach ($this->observers as $obs){
+        foreach ($this->observers as $obs) {
             $obs->send($this);
         }
     }
