@@ -1,7 +1,7 @@
 <?php 
     require_once "housekeepingdecorator.php";
     
-    class Cleaning extends housekeepingdecorator
+    class cleaning extends housekeepingdecorator
     {
 
         public $steamingprice;
@@ -11,6 +11,11 @@
         public function __construct($housekeeping)
         {
             $this->housekeeping=$housekeeping;
+        }
+
+        public function perform()
+        {
+            
         }
 
         public function description ()
