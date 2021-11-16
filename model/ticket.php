@@ -1,5 +1,47 @@
 <?php
 require_once 'subject.php';
+
+function serviceFromId($id)
+{
+    $stmt = DatabaseConnection::getInstance()->prepare(
+        "SELECT service_type_name FROM `service type` WHERE `service type`.serv_id=?"
+    );
+
+    $stmt->bind_param('i', $id);
+    $result = $stmt->execute();
+
+    if (!$result) return NULL;
+
+    $result = $stmt->get_result()->fetch_assoc()["service_type_name"];
+
+    switch ($result) {
+        case 'BaseLandscape':
+
+            break;
+        case 'BaseHousekeeping':
+            
+            break;
+        case 'Garden':
+            
+            break;
+        case 'Trimmer':
+            
+            break;
+        case 'Pesticide':
+            
+            break;
+        case 'Catering':
+            
+            break;
+        case 'Laundry':
+            
+            break;
+        case 'Cleaning':
+            break;
+        default: 
+            return NULL;
+    }
+}
 class Ticket implements Subject
 {
     public $id;
@@ -32,14 +74,17 @@ class Ticket implements Subject
 
         if (!$result) return;
 
-        $this->id = $result["id"];
+        $this->id = $id;
         $this->unit = $result["unit"];
+        $this->title = $result["title"];
 
-        $stmt = DatabaseConnection::getInstance()->prepare(
-            "SELECT * FROM ticketcomment WHERE ..."
-        );
-
-        $stmt->bind_param('s', $id);
+        $this->status = new Status($result["S_ID"]);
+        $this->priority = new Priority($result["P_ID"]);
+        $this->description = $result["description"];
+        $this->author = new User($result["Author_id"]);
+        $this->dateCreated = $result["create_date"];
+        $this->service = serviceFromId($id);
+        $this->comments = array(new Comment($result["C_id"]));
 
         $result = $stmt->execute();
 
@@ -64,7 +109,7 @@ class Ticket implements Subject
         );
 
         $stmt->bind_param(
-            'ssss',
+            'sss',
             $this->unit,
             $this->title,
             $this->description

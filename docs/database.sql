@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 15, 2021 at 10:17 PM
+-- Generation Time: Nov 16, 2021 at 12:31 AM
 -- Server version: 5.7.31
 -- PHP Version: 7.3.21
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `database`
+-- Database: `data_base`
 --
 
 -- --------------------------------------------------------
@@ -76,6 +76,42 @@ INSERT INTO `priority` (`P_id`, `Name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `service`
+--
+
+DROP TABLE IF EXISTS `service`;
+CREATE TABLE IF NOT EXISTS `service` (
+  `serv_id` int(11) NOT NULL AUTO_INCREMENT,
+  `service_type_id` int(11) NOT NULL,
+  `price` int(11) NOT NULL,
+  `Description` varchar(22222) NOT NULL,
+  PRIMARY KEY (`serv_id`),
+  KEY `service_type` (`service_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `service type`
+--
+
+DROP TABLE IF EXISTS `service type`;
+CREATE TABLE IF NOT EXISTS `service type` (
+  `serv_id` int(11) NOT NULL AUTO_INCREMENT,
+  `Cleaning` varchar(222) NOT NULL,
+  `Laundry` varchar(222) NOT NULL,
+  `Catering` varchar(222) NOT NULL,
+  `Pesticide` varchar(222) NOT NULL,
+  `Trimmer` varchar(222) NOT NULL,
+  `Garden` varchar(222) NOT NULL,
+  `BaseHousekeeping` varchar(222) NOT NULL,
+  `BaseLandscape` varchar(222) NOT NULL,
+  PRIMARY KEY (`serv_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `status`
 --
 
@@ -114,12 +150,14 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `C_id` int(11) NOT NULL,
   `Author_id` int(11) NOT NULL,
   `Attachment_id` int(11) DEFAULT NULL,
+  `service_id` int(11) NOT NULL,
   PRIMARY KEY (`T_id`),
   KEY `S_id` (`S_id`,`P_id`,`C_id`),
   KEY `P_id` (`P_id`),
   KEY `C_id` (`C_id`),
   KEY `Author_id` (`Author_id`),
-  KEY `Attachment_id` (`Attachment_id`)
+  KEY `Attachment_id` (`Attachment_id`),
+  KEY `service_id` (`service_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -166,6 +204,12 @@ INSERT INTO `usertype` (`id`, `Name`) VALUES
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `service`
+--
+ALTER TABLE `service`
+  ADD CONSTRAINT `service_ibfk_1` FOREIGN KEY (`service_type_id`) REFERENCES `service type` (`serv_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `ticket`
