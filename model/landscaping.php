@@ -4,7 +4,7 @@ class LandScaping implements Service
 {
     public function price()
     {
-        return;
+        return 0;
     }
     public function perform()
     {
@@ -13,7 +13,7 @@ class LandScaping implements Service
 
     public function description()
     {
-      return;
+      return "";
     }
 
 }

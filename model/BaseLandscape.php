@@ -13,6 +13,10 @@ class BaseLandscape extends Landscaping
         return 20;
     }
 
+    public function perform()
+    {
+    }
+
     public function description()
     {
         return "Basic Landscaping Services";

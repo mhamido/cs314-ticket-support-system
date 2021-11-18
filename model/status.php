@@ -13,6 +13,7 @@ class Status
             "SELECT `status`.`Name` FROM `status` WHERE `status`.S_id=?"
         );
 
+        $stmt->bind_param('i', $id);
         $result = $stmt->execute();
 
         if (!$result) return;

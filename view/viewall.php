@@ -49,22 +49,28 @@ $tickets = $user->getVisibleTickets();
       </thead>
       <tbody>
         <?php foreach ($tickets as $ticket) { ?>
+          <?php echo(var_dump($ticket)); exit(0); ?>
           <tr>
-            <td><a class="navi-link" href="createticket.php" data-toggle="modal">7<?php echo ($ticket->id) ?></a></td>
+            <td>
+              <!-- <a class="navi-link" href="../controller/manageTicket.php?ticket_id=<?php echo($ticket->id); ?>" data-toggle="modal">7<?php echo ($ticket->id) ?></a> -->
+              <form action="../controller/editTicket.php" method="get">
+                <input type="submit" name="ticket_id" value="<?php echo($ticket->id);?>">
+              </form>
+            </td>
             <td><?php echo ($ticket->title) ?></td>
             <td><?php echo ($ticket->dateCreated) ?></td>
-            <?php if ($ticket->status->id === 13) { ?>
+            <?php if ($ticket->status->id() === 13) { ?>
             <td><span class="badge badge-danger m-0"><?php echo ($ticket->status->name()) ?></span></td>
-            <?php } elseif ($ticket->status->id === 3 || $ticket->status->id === 4) { ?>
+            <?php } elseif ($ticket->status->id() === 3 || $ticket->status->id() === 4) { ?>
               <td><span class="badge badge-info m-0"><?php echo ($ticket->status->name()) ?></span></td>
             <?php } else { ?>
-                <td><<span class="badge badge-success m-0"><?php echo ($ticket->status->name()) ?></span></td>
+                <td><span class="badge badge-success m-0"><?php echo ($ticket->status->name()) ?></span></td>
             <?php } ?>
 
-            <?php if ($ticket->priority->id === 3 ) { ?>
+            <?php if ($ticket->priority->id() === 3 ) { ?>
             <td><span class="badge badge-danger m-0"><?php echo ($ticket->priority->name()) ?></span></td>
-            <?php } elseif ($ticket->priority->id === 1) { ?>
-            <td><<span class="badge badge-success m-0"><?php echo ($ticket->priority->name()) ?></span></td>
+            <?php } elseif ($ticket->priority->id() === 1) { ?>
+            <td><span class="badge badge-success m-0"><?php echo ($ticket->priority->name()) ?></span></td>
             <?php } else {  ?>
               <td><span class="badge badge-info m-0"><?php echo ($ticket->priority->name()) ?></span></td>
             <?php } ?>
@@ -75,6 +81,10 @@ $tickets = $user->getVisibleTickets();
     </table>
     <form action="../createticket.php" method="post">
       <button class="button button1">Create Ticket</button>
+    </form>
+    <br><br>
+    <form action="../logout.php" method="post">
+      <button class="button button badge-danger">Logout</button>
     </form>
   </div>
   </div>

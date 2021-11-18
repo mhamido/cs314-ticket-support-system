@@ -1,5 +1,6 @@
 <?php
 require_once 'observer.php';
+require_once 'ticket.php';
 class User implements Observer
 {
     public $id;
@@ -46,9 +47,13 @@ class User implements Observer
 
         $now = date('Y-m-d-H-i-s');
         $fileName = "$this->email-$now";
-        $file = fopen("../mail/$fileName", 'w');
+        $file = fopen("../mail/$fileName.txt", 'w');
         // fwrite($file, "Hello $this->displayName, the ticket titled '$ticket->title' has been updated.");
-        fwrite($file, "Hello $this->displayName, the ticket titled '' has been updated.");
+        fwrite($file, "Hello $this->displayName, the ticket titled '$ticket->title' (#$ticket->id) has been updated.\n");
+        if (isset($ticket) && isset($ticket->service)) {
+            fwrite($file, "Services: " . $ticket->service->description() . "\n");
+            fwrite($file, "Total Cost: " . $ticket->service->price() . "\n");
+        }
         fclose($file);
     }
 
@@ -149,8 +154,10 @@ class User implements Observer
         return $stmt->execute();
     }
 
-    public function createTicket($unit, $title, $service, $description)
+    public function createTicket($unit, $title,  $description, $status, $priority)
     {
+        $now = date_create()->format('Y-m-d H:i:s');
+
         $stmt = DatabaseConnection::getInstance()->prepare(
             "INSERT INTO ticket (
                 unit,
@@ -163,11 +170,26 @@ class User implements Observer
             ) VALUES (?, ?, ?, ?, ?, ?, ?)"
         );
 
+        $sid = $status->id();
+        $pid = $priority->id();
+
         $stmt->bind_param('isiissi',
             $unit,
             $title,
-            // $service,
-            $status
+            $sid,
+            $pid,
+            $description,
+            $now,
+            $this->id
         );
+
+        $result = $stmt->execute();
+        
+        if (!$result) 
+            return false;
+
+        $id = DatabaseConnection::getInstance()->insert_id;
+        // Return an instance with the id of the inserted ticket.
+        return new Ticket($id);
     }
 }

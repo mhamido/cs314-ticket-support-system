@@ -20,7 +20,7 @@
 
         public function description ()
         {
-            return "cleaning serves"+ $this->housekeeping->description();
+            return "cleaning;" . $this->housekeeping->description();
         }
         
         public function price ()

@@ -1,10 +1,9 @@
 <?php
-session_start();
-
 require_once '../errorPage.php';
 require_once '../validation.php';
 require_once '../model/user.php';
 require_once '../model/database.php';
+session_start();
 
 $errs = array();
 $email = $_POST["email"];
@@ -33,7 +32,6 @@ if (empty($errs)) {
             $id = $result->fetch_assoc()["id"];
             $usr = new User($id);
             $_SESSION["user"] = $usr;
-            $usr->send(NULL);
             header("Location: ../view/viewall.php");
         } else {
             displayError(

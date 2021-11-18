@@ -1,10 +1,9 @@
 <?php
-session_start();
-
 require_once '../errorPage.php';
 require_once '../validation.php';
 require_once '../model/user.php';
 require_once '../model/database.php';
+session_start();
 
 $errs = array();
 $email = $_POST["e_mail"];

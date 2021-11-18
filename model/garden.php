@@ -23,7 +23,7 @@ public function waterflowers(){
 
 
 echo("Watered flowers");
-
+    
 
 }
 public function __construct($landscape)
@@ -38,7 +38,7 @@ public function price(){
 }
 
 public function description(){
-    return "Gardening;"+ $this->landscape->description();
+    return "Gardening;" . $this->landscape->description();
 }
 
 

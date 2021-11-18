@@ -1,4 +1,6 @@
 <?php
+	require_once 'model/user.php';
+	require_once 'model/ticket.php';
 	session_start();
 	$ticket=$_SESSION["ticket"];
 ?>
@@ -42,29 +44,34 @@
 					</span>
 
 					<label for="unit">Unit:</label>
-					<input class="input100" type="text" name="unit" placeholder="<?php echo($ticket->unit); ?>" required>
+					<input class="input100" type="text" name="unit" value="<?php echo($ticket->unit); ?>" required>
 
 					<label for="tittle">Title:</label><br>
-					<input class="input100" type="text" name="title" placeholder="<?php echo($ticket->unit); ?>" required>
+					<input class="input100" type="text" name="title" value="<?php echo($ticket->title); ?>" required>
 
 					<label for="description">Description:</label><br>
-					<input class="input100" type="text" name="description" placeholder="<?php echo($ticket->unit); ?>" required>
+					<input class="input100" type="text" name="description" value="<?php echo($ticket->description); ?>" required>
 
 					<label for="myfile">Add A Comment:</label><br>
-					<input class="input100" type="text" name="comment" placeholder="comment">
+					<input class="input100" type="text" name="comment" value="comment">
 
 					<label for="myfile">Select a file:</label><br>
 					
 					<label for="myfile">The serves for this ticket:</label><br>
-					<label for="unit"><?php echo($ticket->service->description()); ?></label>
+					<?php
+						if ($ticket->service) {
+							$desc = $ticket->service->description();
+							echo "<label for=\"description\"> $desc</label>";
+						}
+					?>
 					
 					<div class="container-login100-form-btn">
-						<button name="edit" class="login100-form-btn" onClick="createticket()">
+						<button type="submit" name="edit" class="login100-form-btn" value="on" onClick="createticket()">
 							Edit
 						</button>
 					</div><br>
 					<div class="container-login100-form-btn">
-						<button name="delete" class="login100-form-btn" onClick="createticket()" style="background-color: #f44336">
+						<button type="submit" name="delete" class="login100-form-btn" value="on" onClick="createticket()" style="background-color: #f44336">
 							Delete
 						</button>
 					</div><br>
@@ -93,7 +100,7 @@
 							Want to close?
 						</span>
 
-						<a href="viewallticket.php" class="txt3" onClick="cancelticket()">
+						<a href="view/viewall.php" class="txt3">
 							Close
 						</a>
 					</div>

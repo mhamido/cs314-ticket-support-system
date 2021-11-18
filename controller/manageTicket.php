@@ -5,15 +5,13 @@ require_once '../model/ticket.php';
 session_start();
 
 $errs = array();
-$user = $_SESSION["user"];
 $ticket = $_SESSION["ticket"];
+$user = $_SESSION["user"];
+
 
 $unit = $_POST["unit"];
 $title = $_POST["title"];
 $description = $_POST["description"];
-
-$edit = $_POST["edit"];
-$delete = $_POST["delete"];
 
 if (isset($unit))
     $ticket->unit = $unit;
@@ -24,9 +22,13 @@ if (isset($title))
 if (isset($description))
     $ticket->description = $description;
 
-if ($edit) {
+if (isset($_POST["edit"])) {
+    // var_dump($_POST);
     $ticket->update();
     $ticket->notify();
-} elseif ($delete) {
+} elseif (isset($_POST["delete"])) {
+    $ticket->notify();
     $ticket->delete();
 }
+
+header('Location: ../view/viewall.php');

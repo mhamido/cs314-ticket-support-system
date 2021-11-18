@@ -1,47 +1,10 @@
 <?php
 require_once 'subject.php';
+require_once 'comment.php';
+require_once 'status.php';
+require_once 'comment.php';
+require_once 'priority.php';
 
-function serviceFromId($id)
-{
-    $stmt = DatabaseConnection::getInstance()->prepare(
-        "SELECT service_type_name FROM `service type` WHERE `service type`.serv_id=?"
-    );
-
-    $stmt->bind_param('i', $id);
-    $result = $stmt->execute();
-
-    if (!$result) return NULL;
-
-    $result = $stmt->get_result()->fetch_assoc()["service_type_name"];
-
-    switch ($result) {
-        case 'BaseLandscape':
-
-            break;
-        case 'BaseHousekeeping':
-            
-            break;
-        case 'Garden':
-            
-            break;
-        case 'Trimmer':
-            
-            break;
-        case 'Pesticide':
-            
-            break;
-        case 'Catering':
-            
-            break;
-        case 'Laundry':
-            
-            break;
-        case 'Cleaning':
-            break;
-        default: 
-            return NULL;
-    }
-}
 class Ticket implements Subject
 {
     public $id;
@@ -54,8 +17,7 @@ class Ticket implements Subject
     public $description;
     public $dateCreated;
     public $comments;
-    // private $assignee;
-    private $observers = array();
+    public $observers = array();
 
 
     public function __construct($id)
@@ -74,17 +36,23 @@ class Ticket implements Subject
 
         if (!$result) return;
 
+        // var_dump($result);
         $this->id = $id;
         $this->unit = $result["unit"];
         $this->title = $result["title"];
 
-        $this->status = new Status($result["S_ID"]);
-        $this->priority = new Priority($result["P_ID"]);
+        $this->status = new Status($result["S_id"]);
+        $this->priority = new Priority($result["P_id"]);
         $this->description = $result["description"];
         $this->author = new User($result["Author_id"]);
         $this->dateCreated = $result["create_date"];
-        $this->service = serviceFromId($id);
-        $this->comments = array(new Comment($result["C_id"]));
+        $comment = Comment::get($result["C_id"]);
+
+        if ($comment) {
+            $this->comments = array($comment);
+        } else {
+            $this->comments = array();
+        }
 
         $result = $stmt->execute();
 
@@ -105,14 +73,16 @@ class Ticket implements Subject
             "UPDATE ticket SET 
                 ticket.unit=?,
                 ticket.title=?,
-                ticket.description=?"
+                ticket.description=?
+            WHERE ticket.T_id=?"
         );
 
         $stmt->bind_param(
-            'sss',
+            'sssi',
             $this->unit,
             $this->title,
-            $this->description
+            $this->description,
+            $this->id
         );
 
         return $stmt->execute();
@@ -145,7 +115,9 @@ class Ticket implements Subject
 
     public function notify()
     {
+        // var_dump($this);
         foreach ($this->observers as $obs) {
+            // var_dump($obs);
             $obs->send($this);
         }
     }

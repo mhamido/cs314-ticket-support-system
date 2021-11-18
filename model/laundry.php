@@ -14,7 +14,7 @@ class Laundry extends HousekeepingDecorator
 
     public function description ()
     {
-        return "laundry service"+ $this->housekeeping->description();
+        return "laundry service;" . $this->housekeeping->description();
     }
     
     public function price ()
@@ -22,9 +22,5 @@ class Laundry extends HousekeepingDecorator
         return 3 + $this->housekeeping->price();
     }
     public function perform(){
-
-
-   throw new Exception("TODO:");
-
     }
 }

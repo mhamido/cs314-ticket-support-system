@@ -2,7 +2,14 @@
 
 require_once 'database.php';
 
-class Priority
+class LookupClass 
+{
+    private $tableName;
+    public function id() {}
+    public function name() {}
+}
+
+class Priority extends LookupClass
 {
     private $id;
     private $name;
@@ -10,8 +17,10 @@ class Priority
     public function __construct($id)
     {
         $stmt = DatabaseConnection::getInstance()->prepare(
-            "SELECT `priority`.P_id FROM `priority` WHERE `priority`.P_id=?"
+            "SELECT * FROM `priority` WHERE `priority`.P_id=?"
         );
+
+        $stmt->bind_param('i', $id);
 
         $result = $stmt->execute();
 

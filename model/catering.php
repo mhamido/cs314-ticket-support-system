@@ -18,7 +18,7 @@
 
         public function description ()
         {
-            return "catering serves"+ $this->housekeeping->description();
+            return "catering;" . $this->housekeeping->description();
         }
         
         public function price ()

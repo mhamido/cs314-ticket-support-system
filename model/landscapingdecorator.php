@@ -1,22 +1,14 @@
 <?php
 require_once 'landscaping.php';
-abstract class LandscapingDecorator extends Landscaping{
-
-
-    public function price(){
-        return;
-  
+class LandscapingDecorator extends Landscaping
+{
+    public function price()
+    {
+        return 0;
     }
 
-    public function description(){
-        return;
+    public function description()
+    {
+        return "";
     }
-
-
-
 }
-
-
-
-
-?>
