@@ -17,7 +17,7 @@ $tickets = $user->getVisibleTickets();
   <!--  All snippets are MIT license http://bootdey.com/license -->
   <title>View Tickets</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script> -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -49,7 +49,6 @@ $tickets = $user->getVisibleTickets();
       </thead>
       <tbody>
         <?php foreach ($tickets as $ticket) { ?>
-          <?php echo(var_dump($ticket)); exit(0); ?>
           <tr>
             <td>
               <!-- <a class="navi-link" href="../controller/manageTicket.php?ticket_id=<?php echo($ticket->id); ?>" data-toggle="modal">7<?php echo ($ticket->id) ?></a> -->

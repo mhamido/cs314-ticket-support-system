@@ -5,19 +5,19 @@ require_once '../model/user.php';
 require_once '../model/database.php';
 session_start();
 
-$errs = array();
+$errs = new ErrorPage();
 $email = $_POST["email"];
 $password = $_POST["password"];
 
 if (isNullOrEmpty($email) || !isValidEmail($email)) {
-    $errs[] = "Invalid email address: '$email'";
+    $errs->add("Invalid email address: '$email'");
 }
 
 if (isNullOrEmpty($password)) {
-    $errs[] = "Invalid Password: '$password'";
+    $errs->add("Invalid Password: '$password'");
 }
 
-if (empty($errs)) {
+if ($errs->empty()) {
     // echo "Attempted to login with $email and $password";
     $stmt = DatabaseConnection::getInstance()->prepare(
         "SELECT user.id FROM user
@@ -32,13 +32,12 @@ if (empty($errs)) {
             $id = $result->fetch_assoc()["id"];
             $usr = new User($id);
             $_SESSION["user"] = $usr;
-            header("Location: ../view/viewall.php");
         } else {
-            displayError(
-                array("User with email '$email' does not exist or attempted to login with incorrect credentials.")
+            $errs->add(
+                "User with email '$email' does not exist or attempted to login with incorrect credentials."
             );
         }
     }
-} else {
-    displayError($errs);
 }
+
+$errs->redirect("../view/viewall.php");

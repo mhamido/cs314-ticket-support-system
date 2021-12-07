@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 16, 2021 at 12:31 AM
+-- Generation Time: Dec 07, 2021 at 04:41 PM
 -- Server version: 5.7.31
 -- PHP Version: 7.3.21
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `data_base`
+-- Database: `project database`
 --
 
 -- --------------------------------------------------------
@@ -98,16 +98,23 @@ CREATE TABLE IF NOT EXISTS `service` (
 DROP TABLE IF EXISTS `service type`;
 CREATE TABLE IF NOT EXISTS `service type` (
   `serv_id` int(11) NOT NULL AUTO_INCREMENT,
-  `Cleaning` varchar(222) NOT NULL,
-  `Laundry` varchar(222) NOT NULL,
-  `Catering` varchar(222) NOT NULL,
-  `Pesticide` varchar(222) NOT NULL,
-  `Trimmer` varchar(222) NOT NULL,
-  `Garden` varchar(222) NOT NULL,
-  `BaseHousekeeping` varchar(222) NOT NULL,
-  `BaseLandscape` varchar(222) NOT NULL,
+  `service_type_name` varchar(50) NOT NULL,
   PRIMARY KEY (`serv_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `service type`
+--
+
+INSERT INTO `service type` (`serv_id`, `service_type_name`) VALUES
+(1, 'Cleaning'),
+(2, 'Laundry'),
+(3, 'Catering'),
+(4, 'Pesticide'),
+(5, 'Trimmer'),
+(6, 'Garden'),
+(7, 'BaseHousekeeping'),
+(8, 'BaseLandscape');
 
 -- --------------------------------------------------------
 
@@ -145,12 +152,12 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `title` varchar(200) NOT NULL,
   `S_id` int(11) NOT NULL,
   `P_id` int(11) NOT NULL,
-  `description` varchar(2000) NOT NULL,
+  `description` varchar(2000) DEFAULT '',
   `create_date` datetime NOT NULL,
-  `C_id` int(11) NOT NULL,
+  `C_id` int(11) DEFAULT NULL,
   `Author_id` int(11) NOT NULL,
   `Attachment_id` int(11) DEFAULT NULL,
-  `service_id` int(11) NOT NULL,
+  `service_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`T_id`),
   KEY `S_id` (`S_id`,`P_id`,`C_id`),
   KEY `P_id` (`P_id`),
@@ -158,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   KEY `Author_id` (`Author_id`),
   KEY `Attachment_id` (`Attachment_id`),
   KEY `service_id` (`service_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -177,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `UserType_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `UserType_id` (`UserType_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -190,7 +197,7 @@ CREATE TABLE IF NOT EXISTS `usertype` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(222) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `usertype`

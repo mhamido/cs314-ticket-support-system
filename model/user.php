@@ -87,7 +87,7 @@ class User implements Observer
         $tickets = array();
 
         $stmt = DatabaseConnection::getInstance()->prepare(
-            "SELECT T_id FROM ticket"
+            "SELECT T_id FROM ticket ORDER BY P_id DESC"
         );
 
         // $stmt->bind_param('s', $this->id);

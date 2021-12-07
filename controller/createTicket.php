@@ -17,7 +17,7 @@ require_once '../errorPage.php';
 session_start();
 
 
-$errs = array();
+$errs = new ErrorPage();
 
 $user = $_SESSION["user"];
 
@@ -30,9 +30,7 @@ $service = NULL;
 $canCreateTicket = false;
 
 if (isset($_POST["landscaping"]) && isset($_POST["housekeeping"])) {
-    displayError(array(
-        'Cannot choose more than 1 service.'
-    ));
+    $errs->add('Cannot choose more than 1 service.');
 } elseif (isset($_POST["landscaping"])) {
     $landscaping = new BaseLandscape();
     if (isset($_POST["pesticide"])) {
@@ -58,9 +56,7 @@ if (isset($_POST["landscaping"]) && isset($_POST["housekeeping"])) {
     }
     $service = $housekeeping;
 } else {
-    displayError(array(
-        'You must choose a service.'
-    ));
+    $errs->add('You must choose a service.');
 }
 
 $status = new Status(intval($_POST["status"]));

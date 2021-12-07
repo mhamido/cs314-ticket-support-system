@@ -5,23 +5,27 @@ require_once '../model/user.php';
 require_once '../model/database.php';
 session_start();
 
-$errs = array();
+$errs = new ErrorPage();
 $email = $_POST["e_mail"];
 $password = $_POST["Password"];
 $displayName = $_POST["DisplayName"];
 $confirmPassword = $_POST["ConfirmPassword"];
 
+if (isNullOrEmpty($displayName)) {
+    $errs->add("Display name cannot be empty.");
+}
+
 if (isNullOrEmpty($email) || !isValidEmail($email)) {
-    $errs[] = "Invalid email address: $email.";
+    $errs->add("Invalid email address: $email.");
 }
 
 if (isNullOrEmpty($password) || isNullOrEmpty($confirmPassword)) {
-    $errs[] = "Passwords cannot be empty!";
+    $errs->add("Passwords cannot be empty!");
 } elseif ($password !== $confirmPassword) {
-    $errs[] = "Passwords do not match.";
+    $errs->add("Passwords do not match.");
 }
 
-if (empty($errs)) {
+if ($errs->empty()) {
     // Ensure that such a user doesn't exist already.
     $stmt = DatabaseConnection::getInstance()->prepare(
         "SELECT user.id FROM user WHERE user.email=?"
@@ -36,14 +40,12 @@ if (empty($errs)) {
             User::create($email, $password, $displayName);
             $usr = User::login($email, $password);
             $_SESSION["user"] = $usr;
-            header("Location: ../index.php");
         } else {
-            displayError(array(
+            $errs->add(
                 "User with email '$email' already exists."
-            ));
+            );
         }
     }
-} else {
-    // var_dump($errs);
-    displayError($errs);
 }
+
+$errs->redirect("../index.php");
