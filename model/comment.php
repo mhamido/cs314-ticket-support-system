@@ -1,19 +1,17 @@
 <?php
+require_once 'ticket.php';
 class Comment
 {
     public $id;
+    public $parent;
+    public $contents;
     public $author;
-    public $created;
-    public $body;
 
     public function __construct($id)
     {
-    }
-
-    public static function get($id)
-    {
-        $obj = new Comment(false);
-        $stmt = DatabaseConnection::getInstance()->prepare("SELECT * FROM comment WHERE comment.C_id=?");
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "SELECT * FROM comment WHERE comment.id=?"
+        );
         $stmt->bind_param('i', $id);
         $result = $stmt->execute();
 
@@ -22,32 +20,18 @@ class Comment
         $result = $stmt->get_result();
 
         if ($row = $result->fetch_assoc()) {
-            $obj->id = $id;
-            $obj->author = new User($row["Author"]);
-            $obj->created = $row["creationDate"];
-            $obj->body = $row["body"];
+
+            $this->id = $id;
+          //  $this->ticket = new Ticket($row["ticket_id"]);
+            if ($row["parent_id"] != 0) {
+                $this->parent = new Comment($row["parent_id"]);
+            } else {
+                $this->parent = null;
+            }
+            $this->contents = $row["contents"];
+            $this->author = $row["author"];
         }
     }
 
-    public function update()
-    {
-        $query = "UPDATE comment SET comment.Author=?, ticket.creationDate=?, ticket.body=?,T_id=?";
-        $result = DatabaseConnection::getInstance()->query($query); //singleton
-    }
-
-    public static function create()
-    {
-        $Allcomments = array();
-        $Stmt = "SELECT comment.C_id FROM comment ORDER BY ticket.creationDate DESC";
-        $result = DatabaseConnection::getInstance()->query($Stmt);
-    }
-    public function delete()
-    {
-        $stmt = DatabaseConnection::getInstance()->prepare(
-            "DELETE FROM comment WHERE comment.C_id = ?"
-        );
-
-        $stmt->bind_param('i', $this->id);
-        return $stmt->execute();
-    }
+    
 }
