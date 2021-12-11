@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `ticket_id` int(11) NOT NULL,
   `parent_id` int(11) NOT NULL,
   `contents` varchar(500) NOT NULL,
-  `author` varchar(50) NOT NULL,
+  `author`  int(11) NOT NULL,
 
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
@@ -211,7 +211,7 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `unit` int(11) NOT NULL,
   `title` varchar(50) NOT NULL,
   `description` text NOT NULL,
-  `author` varchar(50) NOT NULL,
+  `author`  int(11) NOT NULL,
   `status_id` int(11) NOT NULL,
   `priority_id` int(11) NOT NULL,
   `inserted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
