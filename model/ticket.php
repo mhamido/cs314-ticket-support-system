@@ -42,22 +42,19 @@ class Ticket implements Subject
         $this->author = $result["author"];
         $this->status = new Status($result["status_id"]);
         $this->priority = new Priority($result["priority_id"]);
-        $this->service=new Service($result["service_id"]);
+        $this->service = new Service($result["service_id"]);
         $stmt = DatabaseConnection::getInstance()->prepare(
-        "SELECT comment.id FROM comment WHERE comment.ticket_id=?"
+            "SELECT comment.id FROM comment WHERE comment.ticket_id=?"
         );
         $stmt->bind_param('i', $id);
         $result = $stmt->execute();
-        
-        if (!$result) return;
-        $result = $stmt->get_result;
-        $this->comments=array();
-        while($commentID = $result->fetch_row())
-        {
-         $this->comments[]=new Comment($commentID);
-        }
 
-        
+        if (!$result) return;
+        $result = $stmt->get_result();
+        $this->comments = array();
+        while ($commentID = $result->fetch_row()) {
+            $this->comments[] = new Comment($commentID);
+        }
     }
 
     public function update()
