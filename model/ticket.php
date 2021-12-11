@@ -2,8 +2,8 @@
 require_once 'subject.php';
 require_once 'comment.php';
 require_once 'status.php';
-require_once 'comment.php';
 require_once 'priority.php';
+require_once 'service.php';
 
 class Ticket implements Subject
 {
@@ -11,23 +11,21 @@ class Ticket implements Subject
     public $unit;
     public $title;
     public $status;
-    public $service;
     public $priority;
-    public $author;
     public $description;
-    public $dateCreated;
+    public $service;
+    public $author;
     public $comments;
+
     public $observers = array();
-
-
     public function __construct($id)
     {
         $this->observers = array();
         $stmt = DatabaseConnection::getInstance()->prepare(
-            "SELECT * FROM ticket WHERE ticket.T_id=?"
+            "SELECT * FROM ticket WHERE ticket.id=?"
         );
 
-        $stmt->bind_param('s', $id);
+        $stmt->bind_param('i', $id);
         $result = $stmt->execute();
 
         if (!$result) return;
@@ -40,30 +38,22 @@ class Ticket implements Subject
         $this->id = $id;
         $this->unit = $result["unit"];
         $this->title = $result["title"];
-
-        $this->status = new Status($result["S_id"]);
-        $this->priority = new Priority($result["P_id"]);
         $this->description = $result["description"];
-        $this->author = new User($result["Author_id"]);
-        $this->dateCreated = $result["create_date"];
-        $comment = Comment::get($result["C_id"]);
-
-        if ($comment) {
-            $this->comments = array($comment);
-        } else {
-            $this->comments = array();
-        }
-
+        $this->author = $result["author"];
+        $this->status = new Status($result["status_id"]);
+        $this->priority = new Priority($result["priority_id"]);
+        $this->service = new Service($result["service_id"]);
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "SELECT comment.id FROM comment WHERE comment.ticket_id=?"
+        );
+        $stmt->bind_param('i', $id);
         $result = $stmt->execute();
 
         if (!$result) return;
-
         $result = $stmt->get_result();
-
         $this->comments = array();
-
         while ($commentID = $result->fetch_row()) {
-            // $this->comments[] = new Comment($commentID);
+            $this->comments[] = new Comment($commentID);
         }
     }
 
@@ -74,7 +64,7 @@ class Ticket implements Subject
                 ticket.unit=?,
                 ticket.title=?,
                 ticket.description=?
-            WHERE ticket.T_id=?"
+            WHERE ticket.id=?"
         );
 
         $stmt->bind_param(
@@ -88,15 +78,15 @@ class Ticket implements Subject
         return $stmt->execute();
     }
 
-    public function delete()
-    {
-        $stmt = DatabaseConnection::getInstance()->prepare(
-            "DELETE FROM ticket WHERE ticket.T_id = ?"
-        );
+    // public function delete()
+    // {
+    //     $stmt = DatabaseConnection::getInstance()->prepare(
+    //         "DELETE FROM ticket WHERE ticket.T_id = ?"
+    //     );
 
-        $stmt->bind_param('i', $this->id);
-        return $stmt->execute();
-    }
+    //     $stmt->bind_param('i', $this->id);
+    //     return $stmt->execute();
+    // }
 
     public function register($observer)
     {
