@@ -22,16 +22,13 @@ class Comment
         if ($row = $result->fetch_assoc()) {
 
             $this->id = $id;
-          //  $this->ticket = new Ticket($row["ticket_id"]);
             if ($row["parent_id"] != 0) {
                 $this->parent = new Comment($row["parent_id"]);
             } else {
                 $this->parent = null;
             }
             $this->contents = $row["contents"];
-            $this->author = $row["author"];
+            $this->author = new User($row["author"]);
         }
     }
-
-    
 }
