@@ -3,7 +3,7 @@ require_once "filterDecorator.php";
 
 class ServiceFilter extends FilterDecorator
 {
-    public $ticket;
+    public $sname;
     public function __construct($Filter)
     {
         $this->Filter = $Filter;
@@ -11,7 +11,6 @@ class ServiceFilter extends FilterDecorator
 
     public function generate()
     {
-        return  $this->filter->generate()."AND IF EXISTS (SELECT * FROM service WHERE service.id='{$this->ticket->id}')";
-        
+        return  $this->filter->generate()." AND ticket.id IN (SELECT ticket.id FROM ticket, service WHERE ticket.service_id = service.id AND service.name LIKE '{$this->sname}'")
     }
 }
