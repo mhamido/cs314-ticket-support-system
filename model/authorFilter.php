@@ -13,6 +13,7 @@ class AuthorFilter extends FilterDecorator
     public function generate()
     {
  
-        return  $this->filter->generate()." AND user.display_name LIKE '{$this->name}'";
+        return  $this->filter->generate()." AND ticket.id IN (SELECT ticket.id FROM ticket, user WHERE ticket.author = user.id AND user.display_name LIKE '{$this->name}'")
+
     }
 }
