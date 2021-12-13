@@ -7,6 +7,7 @@ class AuthorFilter extends FilterDecorator
     private $filter;
     public function __construct($filter)
     {
+        $this->name = $name;
         $this->filter = $filter;
     }
     public function generate()
