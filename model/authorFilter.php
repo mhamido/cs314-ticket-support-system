@@ -4,7 +4,6 @@ require_once "filterDecorator.php";
 class AuthorFilter extends FilterDecorator
 {
     public $name;
-    private $filter;
     public function __construct($filter)
     {
         $this->name = $name;
