@@ -5,7 +5,7 @@ class AttachmentFilter extends FilterDecorator
 {
     public $ticket;
     private $filter;
-    public function __construct($f ilter)
+    public function __construct($filter)
     {
         $this->filter = $filter;
     }
