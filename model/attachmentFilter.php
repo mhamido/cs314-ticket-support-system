@@ -4,7 +4,6 @@ require_once "filterDecorator.php";
 class AttachmentFilter extends FilterDecorator
 {
     public $ticket;
-    private $filter;
     public function __construct($filter)
     {
         $this->filter = $filter;
