@@ -4,7 +4,6 @@ require_once "filterDecorator.php";
 class ServiceFilter extends FilterDecorator
 {
     public $ticket;
-    private $Filter;
     public function __construct($Filter)
     {
         $this->Filter = $Filter;
