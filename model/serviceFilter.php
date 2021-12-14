@@ -4,9 +4,10 @@ require_once "filterDecorator.php";
 class ServiceFilter extends FilterDecorator
 {
     public $sname;
-    public function __construct($Filter)
+    public function __construct($Filter,$sname)
     {
         $this->Filter = $Filter;
+        $this->sname = $sname;
     }
 
     public function generate()
