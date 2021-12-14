@@ -78,7 +78,7 @@ $ticket->notify();
 //var_dump($ticket);
 //throw Exception("hi");
 $_SESSION["ticket"] = $ticket;
-header('Location: ../view/viewall.php');
+header('Location: ../invoice.php');
 
 
 // var_dump($user, $unit, $title, $service, $file);

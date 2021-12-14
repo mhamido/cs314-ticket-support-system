@@ -37,6 +37,43 @@ CREATE TABLE IF NOT EXISTS `attachment` (
 
 -- --------------------------------------------------------
 
+-- Table structure for table `department`
+--
+
+DROP TABLE IF EXISTS `department`;
+CREATE TABLE IF NOT EXISTS `department` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
+
+-- Table structure for table `service_department`
+--
+
+DROP TABLE IF EXISTS `service_department`;
+CREATE TABLE IF NOT EXISTS `service_department` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `service_id` int(11) NOT NULL,
+  `department_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
+
+-- Table structure for table `departmenthead_department`
+--
+
+DROP TABLE IF EXISTS `departmenthead_department`;
+CREATE TABLE IF NOT EXISTS `departmenthead_department` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `department_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+
+-- --------------------------------------------------------
+
 -- Table structure for table `comment`
 --
 
