@@ -66,6 +66,10 @@
 
 					<label for="myfile">Choose your services:</label><br>
 
+					<input type="checkbox" name="landscaping" id="landscaping">
+					<label>Landscaping</label><br>
+					<input type="checkbox" name="housekeeping" id="housekeeping">
+					<label>Housekeeping</label><br>
 					<input type="checkbox" name="pesticide" id="pesticide">
 					<label>Pesticide</label><br>
 					<input type="checkbox" name="trimmer" id="trimmer">
@@ -130,7 +134,6 @@
 	*/
 </script>
 <style type="text/css">
-	/*
 	#pesticide {
 		display: none;
 	}
@@ -178,7 +181,6 @@
 	#housekeeping:checked~#catering {
 		display: block;
 	}
-	*/
 </style>
 
 </html>
