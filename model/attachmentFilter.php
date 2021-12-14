@@ -11,7 +11,7 @@ class AttachmentFilter extends FilterDecorator
 
     public function generate()
     {
-          return  $this->filter->generate(). "SELECT * FROM tickets WHERE TRUE AND EXISTS (SELECT * FROM attachment WHERE Trueattachment.ticket_id='{$this->ticket->id}')";
+          return  $this->filter->generate(). " AND EXISTS (SELECT * FROM attachment WHERE Trueattachment.ticket_id='{$this->ticket->id}')";
           
     }
 }
