@@ -9,11 +9,11 @@ $errs = new ErrorPage();
 $email = $_POST["email"];
 $password = $_POST["password"];
 
-if (isNullOrEmpty($email) || !isValidEmail($email)) {
+if (Validation::isNullOrEmpty($email) || !Validation::isValidEmail($email)) {
     $errs->add("Invalid email address: '$email'");
 }
 
-if (isNullOrEmpty($password)) {
+if (Validation::isNullOrEmpty($password)) {
     $errs->add("Invalid Password: '$password'");
 }
 

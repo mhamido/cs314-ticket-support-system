@@ -1,17 +1,19 @@
 <?php
 
-function isNotNullOrEmpty($str)
+class Validation
 {
-    return isset($str) && !empty($str);
-}
+    public static function isNotNullOrEmpty($str)
+    {
+        return isset($str) && !empty($str);
+    }
 
-function isNullOrEmpty($str)
-{
-    return !isNotNullOrEmpty($str);
-}
+    public static function isNullOrEmpty($str)
+    {
+        return !self::isNotNullOrEmpty($str);
+    }
 
-function isValidEmail($email)
-{
-    return filter_var($email, FILTER_VALIDATE_EMAIL);
+    public static function isValidEmail($email)
+    {
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
 }
-

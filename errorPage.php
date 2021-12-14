@@ -30,7 +30,7 @@ class ErrorPage
 
     public function displayErrors()
     {
-        require('view/error_page.php');
+        require('view/errorPage.php');
     }
 
 }

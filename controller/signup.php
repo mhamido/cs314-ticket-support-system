@@ -11,15 +11,15 @@ $password = $_POST["Password"];
 $displayName = $_POST["DisplayName"];
 $confirmPassword = $_POST["ConfirmPassword"];
 
-if (isNullOrEmpty($displayName)) {
+if (Validation::isNullOrEmpty($displayName)) {
     $errs->add("Display name cannot be empty.");
 }
 
-if (isNullOrEmpty($email) || !isValidEmail($email)) {
+if (Validation::isNullOrEmpty($email) || !Validation::isValidEmail($email)) {
     $errs->add("Invalid email address: $email.");
 }
 
-if (isNullOrEmpty($password) || isNullOrEmpty($confirmPassword)) {
+if (Validation::isNullOrEmpty($password) || Validation::isNullOrEmpty($confirmPassword)) {
     $errs->add("Passwords cannot be empty!");
 } elseif ($password !== $confirmPassword) {
     $errs->add("Passwords do not match.");

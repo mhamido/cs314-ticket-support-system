@@ -1,36 +1,10 @@
 <?php
+require_once 'entity.php';
 
-require_once 'database.php';
-
-class Status
+class Status extends LookupTable
 {
-    private $id;
-    private $name;
-
     public function __construct($id)
     {
-        $stmt = DatabaseConnection::getInstance()->prepare(
-            "SELECT `status`.`Name` FROM `status` WHERE `status`.S_id=?"
-        );
-
-        $stmt->bind_param('i', $id);
-        $result = $stmt->execute();
-
-        if (!$result) return;
-
-        $result = $stmt->get_result()->fetch_assoc();
-
-        $this->id = $id;
-        $this->name = $result["Name"];
-    }
-
-    public function id()
-    {
-        return $this->id;
-    }
-
-    public function name()
-    {
-        return $this->name;
+        parent::__construct($id, "status");
     }
 }

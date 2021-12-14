@@ -1,10 +1,10 @@
 <?php
 require_once 'entity.php';
 
-class Priority extends LookupTable
+class Type extends LookupTable
 {
     public function __construct($id)
     {
-        parent::__construct($id, "priority");
+        parent::__construct($id, "type");
     }
 }
