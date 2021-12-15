@@ -4,6 +4,7 @@ require_once 'comment.php';
 require_once 'status.php';
 require_once 'priority.php';
 require_once 'service.php';
+require_once 'attachment.php';
 
 class Ticket implements Subject
 {
@@ -16,6 +17,7 @@ class Ticket implements Subject
     public $service;
     public $author;
     public $comments;
+    public $attachment;
 
     public $observers = array();
     public function __construct($id)
@@ -50,11 +52,29 @@ class Ticket implements Subject
         $result = $stmt->execute();
 
         if (!$result) return;
-        $result = $stmt->get_result();
+        $result = $stmt->get_result;
         $this->comments = array();
         while ($commentID = $result->fetch_row()) {
             $this->comments[] = new Comment($commentID);
         }
+        //
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "SELECT attachment.id FROM attachment WHERE attachment.ticket_id=?"
+        );
+        $stmt->bind_param('i', $id);
+        $result = $stmt->execute();
+
+        if (!$result) return;
+        $result = $stmt->get_result;
+        $this->attachments[] = array();
+        while ($attachmentID = $result->fetch_row()) {
+            $this->attachment[] = new Attachment($attachmentID);
+        }
+
+
+
+
+
     }
 
     public function update()
