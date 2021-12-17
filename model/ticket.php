@@ -17,7 +17,7 @@ class Ticket implements Subject
     public $service;
     public $author;
     public $comments;
-    public $attachment;
+    public $attachments;
 
     public $observers = array();
     public function __construct($id)
@@ -52,7 +52,7 @@ class Ticket implements Subject
         $result = $stmt->execute();
 
         if (!$result) return;
-        $result = $stmt->get_result;
+        $result = $stmt->get_result();
         $this->comments = array();
         while ($commentID = $result->fetch_row()) {
             $this->comments[] = new Comment($commentID);
@@ -65,10 +65,10 @@ class Ticket implements Subject
         $result = $stmt->execute();
 
         if (!$result) return;
-        $result = $stmt->get_result;
+        $result = $stmt->get_result();
         $this->attachments[] = array();
         while ($attachmentID = $result->fetch_row()) {
-            $this->attachment[] = new Attachment($attachmentID);
+            $this->attachments[] = new Attachment($attachmentID);
         }
 
 
