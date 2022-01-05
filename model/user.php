@@ -30,10 +30,29 @@ class User implements Observer
 
         $this->id = $id;
         $this->displayName = $result["DisplayName"];
-        $this->email = $result["email"];    
+        $this->email = $result["email"];
         $this->password = $result["Password"];
         $this->lastLogin = $result["LastLogin"];
         $this->signupDate = $result["SignupDate"];
+
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "SELECT * FROM user_type WHERE id=?"
+        );
+
+        $stmt->bind_param('i', $result['user_type_id']);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+
+        if ($result['name'] == 'User') {
+            $this->filter = (new CustomerFilter($this));
+        }
+        if ($result['name'] == 'DepartmentHead') {
+            $this->filter = (new DepartmentHeadFilter());
+        }
+        if ($result['name'] == 'Dispatcher') {
+            $this->filter = (new DispatcherFilter());
+        }
+       
     }
 
 
