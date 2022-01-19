@@ -1,12 +1,16 @@
 <?php
 require_once 'observer.php';
 require_once 'ticket.php';
+require_once 'authorFilter.php';
+require_once 'dispatcherFilter.php';
+require_once 'customerFilter.php';
 class User implements Observer
 {
     public $id;
     public $email;
     public $password;
     public $displayName;
+    public $filter;
 
     public function __construct($id)
     {
@@ -27,9 +31,29 @@ class User implements Observer
         $result = $stmt->get_result()->fetch_assoc();
 
         $this->id = $id;
-        $this->displayName = $result["display_name"];
-        $this->email = $result["email"];    
-        $this->password = $result["password"];
+        $this->displayName = $result["DisplayName"];
+        $this->email = $result["email"];
+        $this->password = $result["Password"];
+        $this->lastLogin = $result["LastLogin"];
+        $this->signupDate = $result["SignupDate"];
+
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "SELECT * FROM user_type WHERE id=?"
+        );
+
+        $stmt->bind_param('i', $result['user_type_id']);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+
+        if ($result['name'] == 'User') {
+            $this->filter = (new CustomerFilter($this));
+        }
+        if ($result['name'] == 'DepartmentHead') {
+            $this->filter = (new DepartmentHeadFilter());
+        }
+        if ($result['name'] == 'Dispatcher') {
+            $this->filter = (new DispatcherFilter());
+        }
     }
 
 
@@ -53,7 +77,7 @@ class User implements Observer
         fclose($file);
     }
 
-    
+
     public function update()
     {
         $stmt = DatabaseConnection::getInstance()->prepare(
@@ -76,24 +100,12 @@ class User implements Observer
 
     public function getVisibleTickets()
     {
-        // TODO: `user` should probably only see
-        // tickets that they've created.
         $tickets = array();
-
-        $stmt = DatabaseConnection::getInstance()->prepare(
-            "SELECT id FROM ticket ORDER BY priority_id DESC"
-        );
-
-        // $stmt->bind_param('s', $this->id);
-
-        $result = $stmt->execute();
-
+        $stmt = $this->filter->generate();
+        $result = DatabaseConnection::getInstance()->query($stmt);
         if (!$result) {
             return $tickets;
         }
-
-        $result = $stmt->get_result();
-
         while ($row = $result->fetch_assoc()) {
             $tickets[] = new Ticket($row["id"]);
         }
@@ -175,7 +187,8 @@ class User implements Observer
         $sid = $status->id();
         $pid = $priority->id();
 
-        $stmt->bind_param('isiissi',
+        $stmt->bind_param(
+            'isiissi',
             $unit,
             $title,
             $description,
@@ -185,8 +198,8 @@ class User implements Observer
         );
 
         $result = $stmt->execute();
-        
-        if (!$result) 
+
+        if (!$result)
             return false;
 
         $id = DatabaseConnection::getInstance()->insert_id;
