@@ -6,8 +6,6 @@ class User implements Observer
     public $id;
     public $email;
     public $password;
-    public $lastLogin;
-    public $signupDate;
     public $displayName;
 
     public function __construct($id)
@@ -15,7 +13,7 @@ class User implements Observer
         if (!$id) return;
 
         $stmt = DatabaseConnection::getInstance()->prepare(
-            "SELECT * FROM user WHERE user.id=?"
+            "SELECT * FROM user WHERE user.id=? AND was_deleted=0"
         );
 
         $stmt->bind_param('i', $id);
@@ -29,11 +27,9 @@ class User implements Observer
         $result = $stmt->get_result()->fetch_assoc();
 
         $this->id = $id;
-        $this->displayName = $result["DisplayName"];
+        $this->displayName = $result["display_name"];
         $this->email = $result["email"];    
-        $this->password = $result["Password"];
-        $this->lastLogin = $result["LastLogin"];
-        $this->signupDate = $result["SignupDate"];
+        $this->password = $result["password"];
     }
 
 
@@ -60,16 +56,14 @@ class User implements Observer
     
     public function update()
     {
-        $last_login = $this->lastLogin->format('Y-m-d H:i:s');
         $stmt = DatabaseConnection::getInstance()->prepare(
             "UPDATE user SET 
-                DisplayName=?, 
+                display_name=?, 
                 email=?,
-                LastLogin=?,
-                `Password`=?"
+                `password`=?"
         );
 
-        $stmt->bind_param("ssss", $this->displayName, $this->email, $last_login, $this->password);
+        $stmt->bind_param("sss", $this->displayName, $this->email, $this->password);
         $stmt->execute();
     }
 
@@ -87,7 +81,7 @@ class User implements Observer
         $tickets = array();
 
         $stmt = DatabaseConnection::getInstance()->prepare(
-            "SELECT T_id FROM ticket ORDER BY P_id DESC"
+            "SELECT id FROM ticket ORDER BY priority_id DESC"
         );
 
         // $stmt->bind_param('s', $this->id);
@@ -101,7 +95,7 @@ class User implements Observer
         $result = $stmt->get_result();
 
         while ($row = $result->fetch_assoc()) {
-            $tickets[] = new Ticket($row["T_id"]);
+            $tickets[] = new Ticket($row["id"]);
         }
 
         return $tickets;
@@ -112,10 +106,15 @@ class User implements Observer
         $stmt = DatabaseConnection::getInstance()->prepare(
             "SELECT * FROM user WHERE
                 user.email=? AND
-                user.Password=?"
+                user.`password`=?"
         );
 
-        $stmt->bind_param('ss', $email, $password);
+        $stmt->bind_param(
+            'ss',
+            $email, 
+            sha1($password)
+        );
+
         $result = $stmt->execute();
 
         if (!$result) {
@@ -126,12 +125,9 @@ class User implements Observer
 
         $obj = new User(false);
         $obj->id = $result["id"];
-        $obj->displayName = $result["DisplayName"];
+        $obj->displayName = $result["display_name"];
         $obj->email = $result["email"];
-        $obj->password = $result["Password"];
-        $obj->lastLogin = $result["LastLogin"];
-        $obj->signupDate = $result["SignupDate"];
-
+        $obj->password = $result["password"];
         return $obj;
     }
 
@@ -141,20 +137,25 @@ class User implements Observer
         $now = date_create()->format('Y-m-d H:i:s');
         $stmt = DatabaseConnection::getInstance()->prepare(
             "INSERT INTO user (
-                DisplayName,
                 email,
-                LastLogin,
-                SignupDate,
-                `Password`,
-                UserType_id
-            ) VALUES (?, ?, ?, ?, ?, ?)"
+                `password`,
+                display_name,
+                user_type_id
+            ) VALUES (?, ?, ?, ?)"
         );
 
-        $stmt->bind_param('sssssi', $displayName, $email, $now, $now, $password, $type_id);
+        $stmt->bind_param(
+            'sssi', 
+            $email, 
+            sha1($password),
+            $displayName, 
+            $type_id
+        );
+
         return $stmt->execute();
     }
 
-    public function createTicket($unit, $title,  $description, $status, $priority)
+    public function createTicket($unit, $title,  $description, $status, $priority, $service = NULL)
     {
         $now = date_create()->format('Y-m-d H:i:s');
 
@@ -162,13 +163,14 @@ class User implements Observer
             "INSERT INTO ticket (
                 unit,
                 title,
-                S_id,
-                P_id,
                 `description`,
-                create_date,
-                Author_id
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)"
+                author,
+                status_id,
+                priority_id
+            ) VALUES (?, ?, ?, ?, ?, ?)"
         );
+
+        // TODO: add service.
 
         $sid = $status->id();
         $pid = $priority->id();
@@ -176,11 +178,10 @@ class User implements Observer
         $stmt->bind_param('isiissi',
             $unit,
             $title,
+            $description,
+            $this->id,
             $sid,
             $pid,
-            $description,
-            $now,
-            $this->id
         );
 
         $result = $stmt->execute();

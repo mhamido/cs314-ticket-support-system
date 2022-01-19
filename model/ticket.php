@@ -60,7 +60,7 @@ class Ticket implements Subject
     public function update()
     {
         $stmt = DatabaseConnection::getInstance()->prepare(
-            "UPDATE ticket SET 
+            "UPDATE ticket SET
                 ticket.unit=?,
                 ticket.title=?,
                 ticket.description=?
