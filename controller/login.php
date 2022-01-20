@@ -23,7 +23,8 @@ if ($errs->empty()) {
         "SELECT user.id FROM user
             WHERE user.email=? AND user.Password=?"
     );
-    $stmt->bind_param('ss', $email, sha1($password));
+    $password = sha1($password);
+    $stmt->bind_param('ss', $email, $password);
     $result = $stmt->execute();
 
     if ($result) {
