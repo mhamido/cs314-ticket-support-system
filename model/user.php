@@ -31,11 +31,9 @@ class User implements Observer
         $result = $stmt->get_result()->fetch_assoc();
 
         $this->id = $id;
-        $this->displayName = $result["DisplayName"];
         $this->email = $result["email"];
-        $this->password = $result["Password"];
-        $this->lastLogin = $result["LastLogin"];
-        $this->signupDate = $result["SignupDate"];
+        $this->password = $result["password"];
+        $this->displayName = $result["display_name"];
 
         $stmt = DatabaseConnection::getInstance()->prepare(
             "SELECT * FROM user_type WHERE id=?"
@@ -45,14 +43,18 @@ class User implements Observer
         $stmt->execute();
         $result = $stmt->get_result()->fetch_assoc();
 
-        if ($result['name'] == 'User') {
-            $this->filter = (new CustomerFilter($this));
+        // NOTE: Might be a good use-case for 
+        // a factory since it's a conditional branch
+        // followed by `new`. 
+
+        if (strcasecmp($result['name'], 'User') == 0) {
+            $this->filter = new CustomerFilter($this);
         }
-        if ($result['name'] == 'DepartmentHead') {
-            $this->filter = (new DepartmentHeadFilter());
+        if (strcasecmp($result['name'], 'DepartmentHead') == 0) {
+            $this->filter = new DepartmentHeadFilter($this);
         }
-        if ($result['name'] == 'Dispatcher') {
-            $this->filter = (new DispatcherFilter());
+        if (strcasecmp($result['name'], 'Dispatcher') == 0) {
+            $this->filter = new DispatcherFilter();
         }
     }
 
@@ -102,6 +104,7 @@ class User implements Observer
     {
         $tickets = array();
         $stmt = $this->filter->generate();
+        // var_dump($stmt);
         $result = DatabaseConnection::getInstance()->query($stmt);
         if (!$result) {
             return $tickets;
@@ -123,7 +126,7 @@ class User implements Observer
 
         $stmt->bind_param(
             'ss',
-            $email, 
+            $email,
             sha1($password)
         );
 
@@ -157,10 +160,10 @@ class User implements Observer
         );
 
         $stmt->bind_param(
-            'sssi', 
-            $email, 
+            'sssi',
+            $email,
             sha1($password),
-            $displayName, 
+            $displayName,
             $type_id
         );
 
@@ -169,8 +172,6 @@ class User implements Observer
 
     public function createTicket($unit, $title,  $description, $status, $priority, $service = NULL)
     {
-        $now = date_create()->format('Y-m-d H:i:s');
-
         $stmt = DatabaseConnection::getInstance()->prepare(
             "INSERT INTO ticket (
                 unit,
@@ -178,23 +179,26 @@ class User implements Observer
                 `description`,
                 author,
                 status_id,
-                priority_id
-            ) VALUES (?, ?, ?, ?, ?, ?)"
+                priority_id,
+                service_id
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)"
         );
 
         // TODO: add service.
 
         $sid = $status->id();
         $pid = $priority->id();
+        $serviceId = ($service != NULL ? $service->id : 0);
 
         $stmt->bind_param(
-            'isiissi',
+            'issiiii',
             $unit,
             $title,
             $description,
             $this->id,
             $sid,
             $pid,
+            $serviceId
         );
 
         $result = $stmt->execute();
