@@ -8,10 +8,11 @@ session_start();
 $errs = new ErrorPage();
 $email = $_POST["email"];
 //$language = $_POST["language"];
-$password = $_POST["password"];
 $language=1;
+$password = $_POST["password"];
+
 if (Validation::isNullOrEmpty($email) || !Validation::isValidEmail($email)) {
-    //  $errs->add("Invalid email address: '$email'");
+       //  $errs->add("Invalid email address: '$email'");
 
     $msgid = DatabaseConnection::getInstance()->prepare(
         "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=4"
@@ -30,7 +31,7 @@ if (Validation::isNullOrEmpty($email) || !Validation::isValidEmail($email)) {
 }
 
 if (Validation::isNullOrEmpty($password)) {
-    // $errs->add("Invalid Password: '$password'");
+       // $errs->add("Invalid Password: '$password'");
     $msgid = DatabaseConnection::getInstance()->prepare(
         "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=1"
     );
@@ -53,7 +54,8 @@ if ($errs->empty()) {
         "SELECT user.id FROM user
             WHERE user.email=? AND user.Password=?"
     );
-    $stmt->bind_param('ss', $email, sha1($password));
+    $password = sha1($password);
+    $stmt->bind_param('ss', $email, $password);
     $result = $stmt->execute();
 
     if ($result) {
@@ -63,7 +65,7 @@ if ($errs->empty()) {
             $usr = new User($id);
             $_SESSION["user"] = $usr;
         } else {
-            $msgid = DatabaseConnection::getInstance()->prepare(
+                   $msgid = DatabaseConnection::getInstance()->prepare(
                 "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=5"
             );
             $msgid->execute();
