@@ -7,22 +7,80 @@ session_start();
 
 $errs = new ErrorPage();
 $email = $_POST["e_mail"];
+//$language = $_POST["language"];
+$language=1;
 $password = $_POST["Password"];
 $displayName = $_POST["DisplayName"];
 $confirmPassword = $_POST["ConfirmPassword"];
 
-if (Validation::isNullOrEmpty($displayName)) {
-    $errs->add("Display name cannot be empty.");
+if (isNullOrEmpty($displayName)) {
+       // $errs->add("Display name cannot be empty.");
+   $msgid = DatabaseConnection::getInstance()->prepare(
+    "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=2"
+);
+$msgid->execute();
+$msgid=$msgid->get_result()->fetch_assoc()["error_message_id"];
+var_dump($msgid);
+$msg = DatabaseConnection::getInstance()->prepare(
+    "SELECT * FROM error_messages WHERE id = $msgid"
+);
+
+
+$msg->execute();
+  $msg=$msg->get_result()->fetch_assoc()["message"];
+$errs->add($msg);
+
 }
 
-if (Validation::isNullOrEmpty($email) || !Validation::isValidEmail($email)) {
-    $errs->add("Invalid email address: $email.");
+if (isNullOrEmpty($email) || !isValidEmail($email)) {
+     $msgid = DatabaseConnection::getInstance()->prepare(
+        "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=4"
+    );
+    $msgid->execute();
+    $msgid=$msgid->get_result()->fetch_assoc()["error_message_id"];
+    var_dump($msgid);
+    $msg = DatabaseConnection::getInstance()->prepare(
+        "SELECT * FROM error_messages WHERE id = $msgid"
+    );
+
+
+    $msg->execute();
+      $msg=$msg->get_result()->fetch_assoc()["message"];
+    $errs->add($msg);
 }
 
-if (Validation::isNullOrEmpty($password) || Validation::isNullOrEmpty($confirmPassword)) {
-    $errs->add("Passwords cannot be empty!");
+if (isNullOrEmpty($password) || isNullOrEmpty($confirmPassword)) {
+     //  $errs->add("Passwords cannot be empty!");
+  $msgid = DatabaseConnection::getInstance()->prepare(
+    "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=1"
+);
+$msgid->execute();
+$msgid=$msgid->get_result()->fetch_assoc()["error_message_id"];
+var_dump($msgid);
+$msg = DatabaseConnection::getInstance()->prepare(
+    "SELECT * FROM error_messages WHERE id = $msgid"
+);
+
+
+$msg->execute();
+  $msg=$msg->get_result()->fetch_assoc()["message"];
+$errs->add($msg);
 } elseif ($password !== $confirmPassword) {
-    $errs->add("Passwords do not match.");
+      $msgid = DatabaseConnection::getInstance()->prepare(
+        "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=1"
+    );
+    $msgid->execute();
+    $msgid=$msgid->get_result()->fetch_assoc()["error_message_id"];
+    var_dump($msgid);
+    $msg = DatabaseConnection::getInstance()->prepare(
+        "SELECT * FROM error_messages WHERE id = $msgid"
+    );
+
+
+    $msg->execute();
+      $msg=$msg->get_result()->fetch_assoc()["message"];
+    $errs->add($msg);
+ //   $errs->add("Passwords do not match.");
 }
 
 if ($errs->empty()) {
@@ -41,9 +99,25 @@ if ($errs->empty()) {
             $usr = User::login($email, $password);
             $_SESSION["user"] = $usr;
         } else {
-            $errs->add(
-                "User with email '$email' already exists."
+                $msgid = DatabaseConnection::getInstance()->prepare(
+                "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=3"
             );
+            $msgid->execute();
+            $msgid=$msgid->get_result()->fetch_assoc()["error_message_id"];
+            var_dump($msgid);
+            $msg = DatabaseConnection::getInstance()->prepare(
+                "SELECT * FROM error_messages WHERE id = $msgid"
+            );
+        
+        
+            $msg->execute();
+              $msg=$msg->get_result()->fetch_assoc()["message"];
+            $errs->add($msg);
+          
+            
+         //   $errs->add(
+           //     "User with email '$email' already exists."
+            //);
         }
     }
 }
