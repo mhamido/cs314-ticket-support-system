@@ -73,13 +73,14 @@ class LookupTable extends NamedEntity
     {
         $members = array();
         $result = DatabaseConnection::getInstance()->query(
-            "SELECT id FROM `$tableName`"
+            "SELECT * FROM `$tableName`"
         );
 
         while ($row = $result->fetch_assoc()) {
-            $members[] = new LookupTable($row["id"], $tableName);
+            $members[] = array($row["id"], $row["name"]);
         }
 
+        // var_dump($members);
         return $members;
     }
 

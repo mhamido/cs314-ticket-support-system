@@ -67,16 +67,16 @@ class User implements Observer
         //     "Hello $this->displayName, the ticket titled '$ticket->title' has been updated."
         // );
 
-        $now = date('Y-m-d-H-i-s');
-        $fileName = "$this->email-$now";
-        $file = fopen("../mail/$fileName.txt", 'w');
-        // fwrite($file, "Hello $this->displayName, the ticket titled '$ticket->title' has been updated.");
-        fwrite($file, "Hello $this->displayName, the ticket titled '$ticket->title' (#$ticket->id) has been updated.\n");
-        if (isset($ticket) && isset($ticket->service)) {
-            fwrite($file, "Services: " . $ticket->service->description() . "\n");
-            fwrite($file, "Total Cost: " . $ticket->service->price() . "\n");
-        }
-        fclose($file);
+        // $now = date('Y-m-d-H-i-s');
+        // $fileName = "$this->email-$now";
+        // $file = fopen("../mail/$fileName.txt", 'w');
+        // // fwrite($file, "Hello $this->displayName, the ticket titled '$ticket->title' has been updated.");
+        // fwrite($file, "Hello $this->displayName, the ticket titled '$ticket->title' (#$ticket->id) has been updated.\n");
+        // if (isset($ticket) && isset($ticket->service)) {
+        //     fwrite($file, "Services: " . $ticket->service->description . "\n");
+        //     fwrite($file, "Total Cost: " . $ticket->service->price . "\n");
+        // }
+        // fclose($file);
     }
 
 
