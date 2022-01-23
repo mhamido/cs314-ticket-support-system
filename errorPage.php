@@ -12,6 +12,7 @@ final class ErrorMsg
     public const USER_ALREADY_EXISTS = 3;
     public const INVALID_EMAIL = 4;
     public const USER_DOES_NOT_EXIST = 5;
+    public const INVALID_SERVICES_SELECTED = 6;
 }
 
 class ErrorPage

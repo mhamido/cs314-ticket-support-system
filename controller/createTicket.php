@@ -6,6 +6,7 @@ require_once '../model/priority.php';
 require_once '../validation.php';
 require_once '../errorPage.php';
 require_once '../model/service.php';
+require_once '../model/adapter.php';
 
 session_start();
 
@@ -41,7 +42,10 @@ if (empty($services)) {
     $ticket->service = $service;
     $ticket->register($user);
     $ticket->notify();
-
     $_SESSION["ticket"] = $ticket;
+
+    $createpdf = new createpdf();
+    $mpdfadaptor = new mpdfadapter($createpdf, $user, $ticket);
+    $mpdfadaptor->notify();
 }
 $errs->redirect("../invoice.php");
