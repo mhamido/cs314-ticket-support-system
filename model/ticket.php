@@ -16,6 +16,7 @@ class Ticket implements Subject
     public $service;
     public $author;
     public $comments;
+    public $dateCreated;
 
     public $observers = array();
     public function __construct($id)
@@ -39,10 +40,13 @@ class Ticket implements Subject
         $this->unit = $result["unit"];
         $this->title = $result["title"];
         $this->description = $result["description"];
-        $this->author = $result["author"];
+        $this->author = new User($result["author"]);
         $this->status = new Status($result["status_id"]);
         $this->priority = new Priority($result["priority_id"]);
         $this->service = new Service($result["service_id"]);
+        // $this->dateCreated = $result["created_at"];
+        $this->dateCreated = date('d/m/y', time());
+
         $stmt = DatabaseConnection::getInstance()->prepare(
             "SELECT comment.id FROM comment WHERE comment.ticket_id=?"
         );
