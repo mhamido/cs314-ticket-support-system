@@ -15,7 +15,6 @@ $unit = $_POST["unit"];
 $title = $_POST["title"];
 $description = $_POST["description"];
 // $file = $_FILES["myfile"];
-
 $services = array();
 $canCreateTicket = false;
 
@@ -25,12 +24,11 @@ foreach (Service::fetch() as $service) {
     }
 }
 
-if (!empty($services)) {
-    $errs->add("You must select >= 1 services!");
+if (empty($services)) {
+    $errs->emit(ErrorMsg::INVALID_SERVICES_SELECTED);
 } else {
     $status = new Status(intval($_POST["status"]));
     $priority = new Priority(intval($_POST["priority"]));
-
 
     $ticket = $user->createTicket(
         $unit,
@@ -44,12 +42,6 @@ if (!empty($services)) {
     $ticket->register($user);
     $ticket->notify();
 
-    //var_dump($ticket);
-    //throw Exception("hi");
     $_SESSION["ticket"] = $ticket;
-    header('Location: ../invoice.php');
-
-    // var_dump($user, $unit, $title, $service, $file);
-    // var_dump($_POST);
-    // var_dump($_FILES);
 }
+$errs->redirect("../invoice.php");

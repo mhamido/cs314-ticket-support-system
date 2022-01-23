@@ -7,80 +7,31 @@ session_start();
 
 $errs = new ErrorPage();
 $email = $_POST["e_mail"];
-//$language = $_POST["language"];
-$language=1;
 $password = $_POST["Password"];
 $displayName = $_POST["DisplayName"];
 $confirmPassword = $_POST["ConfirmPassword"];
 
-if (isNullOrEmpty($displayName)) {
-       // $errs->add("Display name cannot be empty.");
-   $msgid = DatabaseConnection::getInstance()->prepare(
-    "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=2"
-);
-$msgid->execute();
-$msgid=$msgid->get_result()->fetch_assoc()["error_message_id"];
-var_dump($msgid);
-$msg = DatabaseConnection::getInstance()->prepare(
-    "SELECT * FROM error_messages WHERE id = $msgid"
-);
-
-
-$msg->execute();
-  $msg=$msg->get_result()->fetch_assoc()["message"];
-$errs->add($msg);
-
+if (isset($_POST["language"])) {
+    $errs = new ErrorPage($_POST["language"]);
+} else {
+    $errs = new ErrorPage();
 }
 
-if (isNullOrEmpty($email) || !isValidEmail($email)) {
-     $msgid = DatabaseConnection::getInstance()->prepare(
-        "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=4"
-    );
-    $msgid->execute();
-    $msgid=$msgid->get_result()->fetch_assoc()["error_message_id"];
-    var_dump($msgid);
-    $msg = DatabaseConnection::getInstance()->prepare(
-        "SELECT * FROM error_messages WHERE id = $msgid"
-    );
-
-
-    $msg->execute();
-      $msg=$msg->get_result()->fetch_assoc()["message"];
-    $errs->add($msg);
+if (Validation::isNullOrEmpty($displayName)) {
+    // $errs->add("Display name cannot be empty.");
+    $errs->emit(ErrorMsg::INVALID_NAME);
 }
 
-if (isNullOrEmpty($password) || isNullOrEmpty($confirmPassword)) {
-     //  $errs->add("Passwords cannot be empty!");
-  $msgid = DatabaseConnection::getInstance()->prepare(
-    "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=1"
-);
-$msgid->execute();
-$msgid=$msgid->get_result()->fetch_assoc()["error_message_id"];
-var_dump($msgid);
-$msg = DatabaseConnection::getInstance()->prepare(
-    "SELECT * FROM error_messages WHERE id = $msgid"
-);
+if (Validation::isNullOrEmpty($email) || !Validation::isValidEmail($email)) {
+    $errs->emit(ErrorMsg::INVALID_EMAIL);
+}
 
-
-$msg->execute();
-  $msg=$msg->get_result()->fetch_assoc()["message"];
-$errs->add($msg);
-} elseif ($password !== $confirmPassword) {
-      $msgid = DatabaseConnection::getInstance()->prepare(
-        "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=1"
-    );
-    $msgid->execute();
-    $msgid=$msgid->get_result()->fetch_assoc()["error_message_id"];
-    var_dump($msgid);
-    $msg = DatabaseConnection::getInstance()->prepare(
-        "SELECT * FROM error_messages WHERE id = $msgid"
-    );
-
-
-    $msg->execute();
-      $msg=$msg->get_result()->fetch_assoc()["message"];
-    $errs->add($msg);
- //   $errs->add("Passwords do not match.");
+if (
+    Validation::isNullOrEmpty($password) ||
+    Validation::isNullOrEmpty($confirmPassword) ||
+    $password !== $confirmPassword
+) {
+    $errs->emit(ErrorMsg::INVALID_PASSWORD);
 }
 
 if ($errs->empty()) {
@@ -99,24 +50,9 @@ if ($errs->empty()) {
             $usr = User::login($email, $password);
             $_SESSION["user"] = $usr;
         } else {
-                $msgid = DatabaseConnection::getInstance()->prepare(
-                "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=3"
-            );
-            $msgid->execute();
-            $msgid=$msgid->get_result()->fetch_assoc()["error_message_id"];
-            var_dump($msgid);
-            $msg = DatabaseConnection::getInstance()->prepare(
-                "SELECT * FROM error_messages WHERE id = $msgid"
-            );
-        
-        
-            $msg->execute();
-              $msg=$msg->get_result()->fetch_assoc()["message"];
-            $errs->add($msg);
-          
-            
-         //   $errs->add(
-           //     "User with email '$email' already exists."
+            $errs->emit(ErrorMsg::USER_ALREADY_EXISTS);
+            //   $errs->add(
+            //     "User with email '$email' already exists."
             //);
         }
     }

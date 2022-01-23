@@ -61,38 +61,42 @@ $user = $ticket->author;
                         Thank You For The Ticket
                     </span>
                     <label for="unit"> Hi <?php echo ($user->displayName); ?>, Just to let you know - we have received your ticket #<?php echo ($ticket->id); ?>, and it's now being processed. </label>
-                    
-                    <h5>[Ticket #<?php echo ($ticket->id)?>] <input value="(<?php echo date('Y-m-d');?>)"></h5><br>
+                    <h5>[Ticket #<?php echo ($ticket->id) ?>] <input value="(<?php echo date('Y-m-d'); ?>)"></h5><br>
                     <label for="unit">Unit: <?php echo ($ticket->unit); ?></label><br>
                     <label for="title">Title: <?php echo ($ticket->title); ?></label><br>
                     <label for="description">Description: <?php echo ($ticket->description); ?></label><br>
                     <label for="priority">Priority: <?php echo ($ticket->priority->name()); ?></label><br>
                     <label for="status">Status: <?php echo ($ticket->status->name()); ?></label><br>
-                    <!--<label for="myfile">File: <?php //echo ($ticket->Attachment_id); ?> </label><br>-->
+                    <!--<label for="myfile">File: <?php //echo ($ticket->Attachment_id); 
+                                                    ?> </label><br>-->
                     <label for="email">E_mail: <?php echo ($user->email); ?></label><br>
-
                     <table>
                         <tr>
-                            <th>Serves</th>
+                            <th>Service</th>
                             <th>Price</th>
                         </tr>
 
-                        <tr>
-                            <td>s1</td>
-                            <td>##</td>
-                        </tr>
-
+                        <?php $sum = 0; ?>
+                        <?php $service = $ticket->service; ?>
+                        <?php while ($service != null) { ?>
+                            <tr>
+                                <td><?php echo $service->name; ?></td>
+                                <td><?php echo $service->price; ?></td>
+                            </tr>
+                            <?php $sum += intval($service->price); ?>
+                            <?php $service = $service->parent; ?>
+                        <?php } ?>
                         <tr>
                             <td>Total Price</td>
-                            <td>####</td>
+                            <td><?php echo $sum; ?></td>
                         </tr>
                     </table><br>
                     <label>Thanks for using our service.</label><br>
                     <div class="container-login100-form-btn">
-						<button class="login100-form-btn">
-							ok
-						</button>
-					</div><br>
+                        <button class="login100-form-btn">
+                            ok
+                        </button>
+                    </div><br>
                 </form>
             </div>
         </div>

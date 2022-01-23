@@ -1,3 +1,7 @@
+<?php 
+require_once "model/service.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -66,7 +70,11 @@
 
 					<label for="myfile">Choose your services:</label><br>
 
-					<input type="checkbox" name="pesticide" id="pesticide">
+					<?php foreach (Service::fetch() as $service) { ?>
+						<input type="checkbox" name="<?php echo($service->name) ?>" id="<?php echo($service->id) ?>">
+						<label for="<?php echo($service->id) ?>"><?php echo($service->name) ?></label> <br>
+					<?php } ?>
+					<!-- <input type="checkbox" name="pesticide" id="pesticide">
 					<label>Pesticide</label><br>
 					<input type="checkbox" name="trimmer" id="trimmer">
 					<label>Trimmer</label><br>
@@ -77,7 +85,7 @@
 					<input type="checkbox" name="laundry" id="laundry">
 					<label>Laundry</label><br>
 					<input type="checkbox" name="catering" id="catering">
-					<label>Catering</label><br>
+					<label>Catering</label><br> -->
 
 					<div class="container-login100-form-btn">
 						<button class="login100-form-btn" onClick="createticket()">

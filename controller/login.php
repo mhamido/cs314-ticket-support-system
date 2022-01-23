@@ -5,47 +5,24 @@ require_once '../model/user.php';
 require_once '../model/database.php';
 session_start();
 
-$errs = new ErrorPage();
 $email = $_POST["email"];
-//$language = $_POST["language"];
-$language=1;
 $password = $_POST["password"];
 
+if (isset($_POST["language"])) {
+    $language = $_POST["language"];
+    $errs = new ErrorPage($_POST["language"]);
+} else {
+    $language = 1;
+    $errs = new ErrorPage();
+}
+
 if (Validation::isNullOrEmpty($email) || !Validation::isValidEmail($email)) {
-       //  $errs->add("Invalid email address: '$email'");
-
-    $msgid = DatabaseConnection::getInstance()->prepare(
-        "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=4"
-    );
-    $msgid->execute();
-    $msgid=$msgid->get_result()->fetch_assoc()["error_message_id"];
-    var_dump($msgid);
-    $msg = DatabaseConnection::getInstance()->prepare(
-        "SELECT * FROM error_messages WHERE id = $msgid"
-    );
-
-
-    $msg->execute();
-      $msg=$msg->get_result()->fetch_assoc()["message"];
-    $errs->add($msg);
+    $errs->emit(ErrorMsg::INVALID_EMAIL);
 }
 
 if (Validation::isNullOrEmpty($password)) {
        // $errs->add("Invalid Password: '$password'");
-    $msgid = DatabaseConnection::getInstance()->prepare(
-        "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=1"
-    );
-    $msgid->execute();
-    $msgid=$msgid->get_result()->fetch_assoc()["error_message_id"];
-    var_dump($msgid);
-    $msg = DatabaseConnection::getInstance()->prepare(
-        "SELECT * FROM error_messages WHERE id = $msgid"
-    );
-
-
-    $msg->execute();
-      $msg=$msg->get_result()->fetch_assoc()["message"];
-    $errs->add($msg);
+    $errs->emit(ErrorMsg::INVALID_PASSWORD);
 }
 
 if ($errs->empty()) {
@@ -65,20 +42,7 @@ if ($errs->empty()) {
             $usr = new User($id);
             $_SESSION["user"] = $usr;
         } else {
-                   $msgid = DatabaseConnection::getInstance()->prepare(
-                "SELECT error_message_id FROM joint_error_languages WHERE language_id=$language AND error_message_type_id=5"
-            );
-            $msgid->execute();
-            $msgid=$msgid->get_result()->fetch_assoc()["error_message_id"];
-            var_dump($msgid);
-            $msg = DatabaseConnection::getInstance()->prepare(
-                "SELECT * FROM error_messages WHERE id = $msgid"
-            );
-
-
-            $msg->execute();
-              $msg=$msg->get_result()->fetch_assoc()["message"];
-            $errs->add($msg);
+            $errs->emit(ErrorMsg::USER_DOES_NOT_EXIST);
             //  $errs->add(
             //     "User with email '$email' does not exist or attempted to login with incorrect credentials."
             //  );
