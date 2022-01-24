@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 19, 2022 at 03:19 PM
--- Server version: 5.7.31
+-- Generation Time: Jan 23, 2022 at 10:58 PM
+-- Server version: 8.0.21
 -- PHP Version: 7.3.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -29,11 +29,11 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `attachment`;
 CREATE TABLE IF NOT EXISTS `attachment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ticket_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `ticket_id` int NOT NULL,
   `url` mediumtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -43,13 +43,13 @@ CREATE TABLE IF NOT EXISTS `attachment` (
 
 DROP TABLE IF EXISTS `comment`;
 CREATE TABLE IF NOT EXISTS `comment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ticket_id` int(11) NOT NULL,
-  `parent_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `ticket_id` int NOT NULL,
+  `parent_id` int NOT NULL,
   `contents` varchar(500) NOT NULL,
-  `author` int(11) NOT NULL,
+  `author` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -59,10 +59,10 @@ CREATE TABLE IF NOT EXISTS `comment` (
 
 DROP TABLE IF EXISTS `department`;
 CREATE TABLE IF NOT EXISTS `department` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -72,11 +72,11 @@ CREATE TABLE IF NOT EXISTS `department` (
 
 DROP TABLE IF EXISTS `departmenthead_department`;
 CREATE TABLE IF NOT EXISTS `departmenthead_department` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `department_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `department_id` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -86,10 +86,10 @@ CREATE TABLE IF NOT EXISTS `departmenthead_department` (
 
 DROP TABLE IF EXISTS `error_messages`;
 CREATE TABLE IF NOT EXISTS `error_messages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `message` mediumtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `error_messages`
@@ -125,10 +125,10 @@ INSERT INTO `error_messages` (`id`, `message`) VALUES
 
 DROP TABLE IF EXISTS `error_message_type`;
 CREATE TABLE IF NOT EXISTS `error_message_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `Name` varchar(222) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `error_message_type`
@@ -137,7 +137,9 @@ CREATE TABLE IF NOT EXISTS `error_message_type` (
 INSERT INTO `error_message_type` (`id`, `Name`) VALUES
 (1, ' InvalidPassword'),
 (2, ' InvalidName'),
-(3, 'UserAlreadyExists');
+(3, 'UserAlreadyExists'),
+(4, 'InvalidEmailAdress'),
+(5, 'Userdoen\'texist');
 
 -- --------------------------------------------------------
 
@@ -147,12 +149,12 @@ INSERT INTO `error_message_type` (`id`, `Name`) VALUES
 
 DROP TABLE IF EXISTS `invoice`;
 CREATE TABLE IF NOT EXISTS `invoice` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `ticket_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `ticket_id` int NOT NULL,
   `inserted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -162,24 +164,33 @@ CREATE TABLE IF NOT EXISTS `invoice` (
 
 DROP TABLE IF EXISTS `joint_error_languages`;
 CREATE TABLE IF NOT EXISTS `joint_error_languages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `language_id` int(11) NOT NULL,
-  `error_message_id` int(11) NOT NULL,
-  `error_message_type_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `language_id` int NOT NULL,
+  `error_message_id` int NOT NULL,
+  `error_message_type_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `language_id` (`language_id`,`error_message_id`,`error_message_type_id`),
   KEY `joint_table` (`error_message_id`),
   KEY `error_message_type_id` (`error_message_type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `joint_error_languages`
 --
 
 INSERT INTO `joint_error_languages` (`id`, `language_id`, `error_message_id`, `error_message_type_id`) VALUES
-(1, 1, 2, 1),
+(4, 1, 1, 4),
 (2, 1, 2, 1),
-(3, 3, 16, 1);
+(5, 1, 3, 2),
+(6, 1, 6, 3),
+(7, 1, 7, 5),
+(8, 2, 9, 1),
+(9, 2, 13, 4),
+(10, 2, 14, 5),
+(11, 3, 15, 4),
+(3, 3, 16, 1),
+(12, 3, 16, 1),
+(13, 3, 20, 5);
 
 -- --------------------------------------------------------
 
@@ -189,10 +200,10 @@ INSERT INTO `joint_error_languages` (`id`, `language_id`, `error_message_id`, `e
 
 DROP TABLE IF EXISTS `languages`;
 CREATE TABLE IF NOT EXISTS `languages` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(222) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `languages`
@@ -211,11 +222,11 @@ INSERT INTO `languages` (`id`, `name`) VALUES
 
 DROP TABLE IF EXISTS `options`;
 CREATE TABLE IF NOT EXISTS `options` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
-  `type_id` int(11) NOT NULL,
+  `type_id` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -225,11 +236,11 @@ CREATE TABLE IF NOT EXISTS `options` (
 
 DROP TABLE IF EXISTS `page`;
 CREATE TABLE IF NOT EXISTS `page` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `friendly_name` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `friendly_name` int NOT NULL,
   `html` mediumtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -239,10 +250,10 @@ CREATE TABLE IF NOT EXISTS `page` (
 
 DROP TABLE IF EXISTS `priority`;
 CREATE TABLE IF NOT EXISTS `priority` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `priority`
@@ -261,13 +272,13 @@ INSERT INTO `priority` (`id`, `name`) VALUES
 
 DROP TABLE IF EXISTS `service`;
 CREATE TABLE IF NOT EXISTS `service` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
-  `price` int(11) NOT NULL,
+  `price` int NOT NULL,
   `description` varchar(200) NOT NULL,
-  `parent_id` int(11) NOT NULL,
+  `parent_id` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -277,11 +288,11 @@ CREATE TABLE IF NOT EXISTS `service` (
 
 DROP TABLE IF EXISTS `service_department`;
 CREATE TABLE IF NOT EXISTS `service_department` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `service_id` int(11) NOT NULL,
-  `department_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `service_id` int NOT NULL,
+  `department_id` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -291,13 +302,13 @@ CREATE TABLE IF NOT EXISTS `service_department` (
 
 DROP TABLE IF EXISTS `service_option`;
 CREATE TABLE IF NOT EXISTS `service_option` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `service_id` int(11) NOT NULL,
-  `option_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `service_id` int NOT NULL,
+  `option_id` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `Service_ID` (`service_id`),
   KEY `Option_ID` (`option_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -307,12 +318,12 @@ CREATE TABLE IF NOT EXISTS `service_option` (
 
 DROP TABLE IF EXISTS `service_option_value`;
 CREATE TABLE IF NOT EXISTS `service_option_value` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `service_option_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `service_option_id` int NOT NULL,
   `value` mediumtext NOT NULL,
   PRIMARY KEY (`id`),
   KEY `service_option_id` (`service_option_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -322,10 +333,10 @@ CREATE TABLE IF NOT EXISTS `service_option_value` (
 
 DROP TABLE IF EXISTS `status`;
 CREATE TABLE IF NOT EXISTS `status` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `status`
@@ -345,20 +356,20 @@ INSERT INTO `status` (`id`, `name`) VALUES
 
 DROP TABLE IF EXISTS `ticket`;
 CREATE TABLE IF NOT EXISTS `ticket` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `unit` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `unit` int NOT NULL,
   `title` varchar(50) NOT NULL,
   `description` mediumtext NOT NULL,
-  `author` int(11) NOT NULL,
-  `status_id` int(11) NOT NULL,
-  `priority_id` int(11) NOT NULL,
+  `author` int NOT NULL,
+  `status_id` int NOT NULL,
+  `priority_id` int NOT NULL,
   `inserted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `was_deleted` int(11) NOT NULL DEFAULT '0',
-  `service_id` int(11) NOT NULL,
+  `was_deleted` int NOT NULL DEFAULT '0',
+  `service_id` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -368,10 +379,10 @@ CREATE TABLE IF NOT EXISTS `ticket` (
 
 DROP TABLE IF EXISTS `type`;
 CREATE TABLE IF NOT EXISTS `type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -381,17 +392,24 @@ CREATE TABLE IF NOT EXISTS `type` (
 
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `email` varchar(50) NOT NULL,
   `password` mediumtext NOT NULL,
   `display_name` varchar(50) NOT NULL,
-  `user_type_id` int(11) NOT NULL,
+  `user_type_id` int NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `inserted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `was_deleted` int(11) NOT NULL DEFAULT '0',
+  `was_deleted` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `email`, `password`, `display_name`, `user_type_id`, `created_at`, `inserted_at`, `deleted_at`, `was_deleted`) VALUES
+(1, 'toukawael@gmail.com', '8578173555a47d4ea49e697badfda270dee0858f', 'touka43', 1, '2022-01-23 22:57:15', '2022-01-23 22:57:15', '2022-01-23 22:57:15', 0);
 
 -- --------------------------------------------------------
 
@@ -401,10 +419,10 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 DROP TABLE IF EXISTS `user_type`;
 CREATE TABLE IF NOT EXISTS `user_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `user_type`
@@ -423,11 +441,11 @@ INSERT INTO `user_type` (`id`, `name`) VALUES
 
 DROP TABLE IF EXISTS `user_type_page`;
 CREATE TABLE IF NOT EXISTS `user_type_page` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_type_id` int(11) NOT NULL,
-  `page_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_type_id` int NOT NULL,
+  `page_id` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Constraints for dumped tables

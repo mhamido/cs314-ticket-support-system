@@ -30,7 +30,6 @@ class Attachment
 
     public function update()
     {
-        $last_login = $this->lastLogin->format('Y-m-d H:i:s');
         $stmt = DatabaseConnection::getInstance()->prepare(
             "UPDATE attachment SET 
                 `URL`=?, "

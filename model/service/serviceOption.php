@@ -4,7 +4,7 @@ require_once '../entity.php';
 require_once '../database.php';
 
 /**
- * @deprecated ServiceOption
+ * @deprecated ServiceOption.
  */
 
 class ServiceOption extends Entity
