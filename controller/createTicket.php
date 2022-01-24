@@ -24,9 +24,10 @@ foreach (Service::fetch() as $service) {
     }
 }
 
-if (empty($services)) {
+if (empty($services) || sizeof($services) > 1) {
     $errs->emit(ErrorMsg::INVALID_SERVICES_SELECTED);
 } else {
+    $service = $services[0];
     $status = new Status(intval($_POST["status"]));
     $priority = new Priority(intval($_POST["priority"]));
 

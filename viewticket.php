@@ -1,14 +1,14 @@
 <?php
-	require_once 'model/user.php';
-	require_once 'model/ticket.php';
-	session_start();
-	$ticket=$_SESSION["ticket"];
+require_once 'model/user.php';
+require_once 'model/ticket.php';
+session_start();
+$ticket = $_SESSION["ticket"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<title>Compound Help Desk System - Viewing <?php echo($ticket->id); ?> </title>
+	<title>Compound Help Desk System - Viewing <?php echo ($ticket->id); ?> </title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--===============================================================================================-->
@@ -40,31 +40,31 @@
 			<div class="wrap-login100">
 				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178" method="POST" action="controller/manageTicket.php">
 					<span class="login100-form-title">
-						View Ticket: <?php echo($ticket->id); ?>
+						View Ticket: <?php echo ($ticket->id); ?>
 					</span>
 
 					<label for="unit">Unit:</label>
-					<input class="input100" type="text" name="unit" value="<?php echo($ticket->unit); ?>" required>
+					<input class="input100" type="text" name="unit" value="<?php echo ($ticket->unit); ?>" required>
 
 					<label for="tittle">Title:</label><br>
-					<input class="input100" type="text" name="title" value="<?php echo($ticket->title); ?>" required>
+					<input class="input100" type="text" name="title" value="<?php echo ($ticket->title); ?>" required>
 
 					<label for="description">Description:</label><br>
-					<input class="input100" type="text" name="description" value="<?php echo($ticket->description); ?>" required>
+					<input class="input100" type="text" name="description" value="<?php echo ($ticket->description); ?>" required>
 
 					<label for="myfile">Add A Comment:</label><br>
 					<input class="input100" type="text" name="comment" value="comment">
 
 					<label for="myfile">Select a file:</label><br>
-					
+
 					<label for="myfile">The serves for this ticket:</label><br>
 					<?php
-						if ($ticket->service) {
-							$desc = $ticket->service->description();
-							echo "<label for=\"description\"> $desc</label>";
-						}
+					if ($ticket->service) {
+						$desc = $ticket->service->description;
+						echo "<label for=\"description\"> $desc</label>";
+					}
 					?>
-					
+
 					<div class="container-login100-form-btn">
 						<button type="submit" name="edit" class="login100-form-btn" value="on" onClick="createticket()">
 							Edit

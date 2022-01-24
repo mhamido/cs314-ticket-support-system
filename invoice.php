@@ -81,14 +81,14 @@ $user = $ticket->author;
                         <?php while ($service != null) { ?>
                             <tr>
                                 <td><?php echo $service->name; ?></td>
-                                <td><?php echo $service->price; ?></td>
+                                <td>$<?php echo $service->price; ?></td>
                             </tr>
                             <?php $sum += intval($service->price); ?>
                             <?php $service = $service->parent; ?>
                         <?php } ?>
                         <tr>
                             <td>Total Price</td>
-                            <td><?php echo $sum; ?></td>
+                            <td>$<?php echo $sum; ?></td>
                         </tr>
                     </table><br>
                     <label>Thanks for using our service.</label><br>

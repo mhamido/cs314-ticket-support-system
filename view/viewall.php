@@ -77,19 +77,18 @@ $tickets = $user->getVisibleTickets();
           </tr>
         <?php  } ?>
       </tbody>
-
     </table>
-    <form action="../createticket.php" method="post">
-      <button class="button button1">Create Ticket</button>
-    </form>
-    <br>
-
-
-    <br>
-    <form action="../logout.php" method="post">
-      <button class="button button badge-danger">Logout</button>
-    </form>
-
+    <span class="container" style="display: inline;">
+      <form action="../createticket.php" method="post" style="display: inline;">
+        <button class="button button1" style="display: inline;">Create Ticket</button>
+      </form>
+      <form action="../view/createService.php" method="post" style="display: inline;">
+        <button class="button button1" style="display: inline;">Create Service</button>
+      </form>
+      <form action="../logout.php" method="post" style="display: inline;">
+        <button class="button button badge-danger" style="display: inline;">Logout</button>
+      </form>
+    </span>
   </div>
   </div>
   </div>
@@ -97,295 +96,307 @@ $tickets = $user->getVisibleTickets();
 
 
   <body>
-
-    <h4> Show tickets by:</h4>
-
-    <form action="viewall.php" method="post">
-      <input type="checkbox" id="" name="ELE" value="status">
-      <label for="priority"> New</label> 
-      <input type="checkbox" id="priority" name="ELE" value="Low">
-      <label for="priority"> Low</label><br>
-      <input type="checkbox" id="" name="ELE" value="status">
-      <label for="status"> Pending</label> 
-      <input type="checkbox" id="priority" name="ELE" value="Medium">
-      <label for="priority"> Medium</label><br>
-      <input type="checkbox" id="" name="ELE" value="status">
-      <label for="status"> Closed</label> 
-      <input type="checkbox" id="priority" name="ELE" value="High">
-      <label for="priority">High</label><br>
-
-      <input type="button" onclick='selects()' value="Select All" />
-      <input type="button" onclick='deSelects()' value="Deselect All" /> <br><br>
-     
-  
-      
-
-
-
+    <div class="container jumbotron">
       <br><br>
-      <h4>Filter By Name And ID</h4>               
-      <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search Ticket By Name..." title="Type in a name">
-      <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search Ticket By ID.." title="Type in a name">
+      <h4>Generate Report:</h4>
 
-   <br><br>
-   <br><br>
-   <label for="services">Choose a service:</label>
-  <select name="services" id="services">
-  <option value="Housekeeping">BaseHousekeeping</option>
-    <option value="Landscaping">Pesticide</option>
-    <option value="Landscaping">BaseLandscaping</option>
-    <option value="Cattering">Cattering</option>
-  </select>
-      <input type="submit" value="Search">
-    </form>
+      <form action="../controller/report.php" method="post">
+        <label for="name">Report Name:</label>
+        <input type="text" name="report_name" id="report_name">
+        <br>
+        <?php foreach (LookupTable::fetch("status") as $status) { ?>
+          <?php [$id, $name] = $status; ?>
+          <label for="<?php echo $id; ?>"><?php echo $name; ?></label>
+          <input type="checkbox" name="<?php echo $name; ?>" id="">
+          <br>
+        <?php } ?>
+        <br><br>
+        <?php foreach (LookupTable::fetch("priority") as $priority) { ?>
+          <?php [$id, $name] = $priority; ?>
+          <label for="<?php echo $id; ?>"><?php echo $name; ?></label>
+          <input type="checkbox" name="<?php echo $name; ?>" id="">
+          <br>
+        <?php } ?>
+
+        <!-- <input type="checkbox" id="" name="ELE" value="status">
+  <label for="priority"> New</label>
+  <input type="checkbox" id="priority" name="ELE" value="Low">
+  <label for="priority"> Low</label><br>
+  <input type="checkbox" id="" name="ELE" value="status">
+  <label for="status"> Pending</label>
+  <input type="checkbox" id="priority" name="ELE" value="Medium">
+  <label for="priority"> Medium</label><br>
+  <input type="checkbox" id="" name="ELE" value="status">
+  <label for="status"> Closed</label>
+  <input type="checkbox" id="priority" name="ELE" value="High">
+  <label for="priority">High</label><br> -->
+
+        <input type="button" onclick='selects()' value="Select All" />
+        <input type="button" onclick='deSelects()' value="Deselect All" /> <br><br>
+
+        <br><br>
+        <h4>Filter By Name And ID</h4>
+        <input type="text" name="ticket_author_name" placeholder="Author name:" title="Type in a name"><br>
+        <input type="text" name="ticket_id" placeholder="Ticket ID:" title="Type in a name">
+        <br><br>
+        <br><br>
+        <label for="services">Choose a service:</label>
+        <select name="services" id="services">
+          <option value="0" selected>All Services</option>
+          <?php foreach (Service::fetch() as $service) { ?>
+            <option value="<?php echo $service->name; ?>">
+              <?php echo $service->name; ?>
+            </option>
+          <?php } ?>
+        </select>
+        <input type="submit" value="Search">
+      </form>
 
 
-    <script type="text/javascript">
-      function selects() {
-        var ele = document.getElementsByName('ELE');
-        for (var i = 0; i < ele.length; i++) {
-         
+      <script type="text/javascript">
+        function selects() {
+          var ele = document.querySelectorAll('input[type=checkbox]');
+          for (var i = 0; i < ele.length; i++) {
+
             ele[i].checked = true;
+          }
         }
-      }
 
-      function deSelects() {
-        var ele = document.getElementsByName('ELE');
-        for (var i = 0; i < ele.length; i++) {
-        
+        function deSelects() {
+          var ele = document.querySelectorAll('input[type=checkbox]');
+          for (var i = 0; i < ele.length; i++) {
+
             ele[i].checked = false;
 
+          }
+
         }
-       
-  }
+      </script>
 
-    </script>
-
-    <style type="text/css">
-      .button {
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-      }
+      <style type="text/css">
+        .button {
+          border: none;
+          color: white;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+        }
 
 
 
-      .button:focus {
-        border: none;
-        outline: none;
-      }
+        .button:focus {
+          border: none;
+          outline: none;
+        }
 
-      .button:focus {
-        outline: none !important;
-      }
+        .button:focus {
+          outline: none !important;
+        }
 
-      .button1 {
-        background-color: #4CAF50;
-      }
+        .button1 {
+          background-color: #4CAF50;
+        }
 
-      body {
-        background: #eee;
-      }
+        body {
+          background: #eee;
+        }
 
-      .main-container {
-        margin-top: 40px;
-      }
+        .main-container {
+          margin-top: 40px;
+        }
 
-      .widget-author {
-        margin-bottom: 58px;
-      }
+        .widget-author {
+          margin-bottom: 58px;
+        }
 
-      .author-card {
-        position: relative;
-        padding-bottom: 48px;
-        background-color: #fff;
-        box-shadow: 0 12px 20px 1px rgba(64, 64, 64, .09);
-      }
+        .author-card {
+          position: relative;
+          padding-bottom: 48px;
+          background-color: #fff;
+          box-shadow: 0 12px 20px 1px rgba(64, 64, 64, .09);
+        }
 
-      .author-card .author-card-cover {
-        position: relative;
-        width: 100%;
-        height: 100px;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
+        .author-card .author-card-cover {
+          position: relative;
+          width: 100%;
+          height: 100px;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
 
-      .author-card .author-card-cover::after {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        content: '';
-        opacity: 0.5;
-      }
+        .author-card .author-card-cover::after {
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          content: '';
+          opacity: 0.5;
+        }
 
-      .author-card .author-card-cover>.btn {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        padding: 0 10px;
-      }
+        .author-card .author-card-cover>.btn {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          padding: 0 10px;
+        }
 
-      .author-card .author-card-profile {
-        display: table;
-        position: relative;
-        margin-top: -22px;
-        padding-right: 15px;
-        padding-bottom: 16px;
-        padding-left: 20px;
-        z-index: 5;
-      }
+        .author-card .author-card-profile {
+          display: table;
+          position: relative;
+          margin-top: -22px;
+          padding-right: 15px;
+          padding-bottom: 16px;
+          padding-left: 20px;
+          z-index: 5;
+        }
 
-      .author-card .author-card-profile .author-card-avatar,
-      .author-card .author-card-profile .author-card-details {
-        display: table-cell;
-        vertical-align: middle;
-      }
+        .author-card .author-card-profile .author-card-avatar,
+        .author-card .author-card-profile .author-card-details {
+          display: table-cell;
+          vertical-align: middle;
+        }
 
-      .author-card .author-card-profile .author-card-avatar {
-        width: 85px;
-        border-radius: 50%;
-        box-shadow: 0 8px 20px 0 rgba(0, 0, 0, .15);
-        overflow: hidden;
-      }
+        .author-card .author-card-profile .author-card-avatar {
+          width: 85px;
+          border-radius: 50%;
+          box-shadow: 0 8px 20px 0 rgba(0, 0, 0, .15);
+          overflow: hidden;
+        }
 
-      .author-card .author-card-profile .author-card-avatar>img {
-        display: block;
-        width: 100%;
-      }
+        .author-card .author-card-profile .author-card-avatar>img {
+          display: block;
+          width: 100%;
+        }
 
-      .author-card .author-card-profile .author-card-details {
-        padding-top: 20px;
-        padding-left: 15px;
-      }
+        .author-card .author-card-profile .author-card-details {
+          padding-top: 20px;
+          padding-left: 15px;
+        }
 
-      .author-card .author-card-profile .author-card-name {
-        margin-bottom: 2px;
-        font-size: 14px;
-        font-weight: bold;
-      }
+        .author-card .author-card-profile .author-card-name {
+          margin-bottom: 2px;
+          font-size: 14px;
+          font-weight: bold;
+        }
 
-      .author-card .author-card-profile .author-card-position {
-        display: block;
-        color: #8c8c8c;
-        font-size: 12px;
-        font-weight: 600;
-      }
+        .author-card .author-card-profile .author-card-position {
+          display: block;
+          color: #8c8c8c;
+          font-size: 12px;
+          font-weight: 600;
+        }
 
-      .author-card .author-card-info {
-        margin-bottom: 0;
-        padding: 0 25px;
-        font-size: 13px;
-      }
+        .author-card .author-card-info {
+          margin-bottom: 0;
+          padding: 0 25px;
+          font-size: 13px;
+        }
 
-      .author-card .author-card-social-bar-wrap {
-        position: absolute;
-        bottom: -18px;
-        left: 0;
-        width: 100%;
-      }
+        .author-card .author-card-social-bar-wrap {
+          position: absolute;
+          bottom: -18px;
+          left: 0;
+          width: 100%;
+        }
 
-      .author-card .author-card-social-bar-wrap .author-card-social-bar {
-        display: table;
-        margin: auto;
-        background-color: #fff;
-        box-shadow: 0 12px 20px 1px rgba(64, 64, 64, .11);
-      }
+        .author-card .author-card-social-bar-wrap .author-card-social-bar {
+          display: table;
+          margin: auto;
+          background-color: #fff;
+          box-shadow: 0 12px 20px 1px rgba(64, 64, 64, .11);
+        }
 
-      .btn-style-1.btn-white {
-        background-color: #fff;
-      }
+        .btn-style-1.btn-white {
+          background-color: #fff;
+        }
 
-      .list-group-item i {
-        display: inline-block;
-        margin-top: -1px;
-        margin-right: 8px;
-        font-size: 1.2em;
-        vertical-align: middle;
-      }
+        .list-group-item i {
+          display: inline-block;
+          margin-top: -1px;
+          margin-right: 8px;
+          font-size: 1.2em;
+          vertical-align: middle;
+        }
 
-      .mr-1,
-      .mx-1 {
-        margin-right: .25rem !important;
-      }
+        .mr-1,
+        .mx-1 {
+          margin-right: .25rem !important;
+        }
 
-      .list-group-item.active:not(.disabled) {
-        border-color: #e7e7e7;
-        background: #fff;
-        color: #ac32e4;
-        cursor: default;
-        pointer-events: none;
-      }
+        .list-group-item.active:not(.disabled) {
+          border-color: #e7e7e7;
+          background: #fff;
+          color: #ac32e4;
+          cursor: default;
+          pointer-events: none;
+        }
 
-      .list-group-flush:last-child .list-group-item:last-child {
-        border-bottom: 0;
-      }
+        .list-group-flush:last-child .list-group-item:last-child {
+          border-bottom: 0;
+        }
 
-      .list-group-flush .list-group-item {
-        border-right: 0 !important;
-        border-left: 0 !important;
-      }
+        .list-group-flush .list-group-item {
+          border-right: 0 !important;
+          border-left: 0 !important;
+        }
 
-      .list-group-flush .list-group-item {
-        border-right: 0;
-        border-left: 0;
-        border-radius: 0;
-      }
+        .list-group-flush .list-group-item {
+          border-right: 0;
+          border-left: 0;
+          border-radius: 0;
+        }
 
-      .list-group-item.active {
-        z-index: 2;
-        color: #fff;
-        background-color: #007bff;
-        border-color: #007bff;
-      }
+        .list-group-item.active {
+          z-index: 2;
+          color: #fff;
+          background-color: #007bff;
+          border-color: #007bff;
+        }
 
-      .list-group-item:last-child {
-        margin-bottom: 0;
-        border-bottom-right-radius: .25rem;
-        border-bottom-left-radius: .25rem;
-      }
+        .list-group-item:last-child {
+          margin-bottom: 0;
+          border-bottom-right-radius: .25rem;
+          border-bottom-left-radius: .25rem;
+        }
 
-      a.list-group-item,
-      .list-group-item-action {
-        color: #404040;
-        font-weight: 600;
-      }
+        a.list-group-item,
+        .list-group-item-action {
+          color: #404040;
+          font-weight: 600;
+        }
 
-      .list-group-item {
-        padding-top: 16px;
-        padding-bottom: 16px;
-        -webkit-transition: all .3s;
-        transition: all .3s;
-        border: 1px solid #e7e7e7 !important;
-        border-radius: 0 !important;
-        color: #404040;
-        font-size: 12px;
-        font-weight: 600;
-        letter-spacing: .08em;
-        text-transform: uppercase;
-        text-decoration: none;
-      }
+        .list-group-item {
+          padding-top: 16px;
+          padding-bottom: 16px;
+          -webkit-transition: all .3s;
+          transition: all .3s;
+          border: 1px solid #e7e7e7 !important;
+          border-radius: 0 !important;
+          color: #404040;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: .08em;
+          text-transform: uppercase;
+          text-decoration: none;
+        }
 
-      .list-group-item {
-        position: relative;
-        display: block;
-        padding: .75rem 1.25rem;
-        margin-bottom: -1px;
-        background-color: #fff;
-        border: 1px solid rgba(0, 0, 0, 0.125);
-      }
-    </style>
-
-
+        .list-group-item {
+          position: relative;
+          display: block;
+          padding: .75rem 1.25rem;
+          margin-bottom: -1px;
+          background-color: #fff;
+          border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+      </style>
+    </div>
   </body>
 
 </html>

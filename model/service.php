@@ -57,13 +57,13 @@ class Service extends ModifiableEntity
         $name,
         $price,
         $description,
-        $attributes = array(),
+        $values = array(),
         $parent = NULL
     ) {
         $parentId = 0;
         $serviceId = -1;
         $errs = new ErrorPage();
-    
+
         if ($parent != NULL) {
             $parentId = $parent->id;
         }
@@ -77,19 +77,18 @@ class Service extends ModifiableEntity
             ) VALUES (?, ?, ?, ?)"
         );
 
-        foreach ($attributes as $optionName => $fields) {
-            [$type, $value] = $fields;
-            if (!$type->validate($value)) {
+        foreach ($values as $value) {
+            if (!$value->type->validate($value)) {
                 // TODO: Validate fields here, too.
                 throw new Exception("TODO: Validation Error.");
             }
         }
-        
+
         // Only execute the query if the
         // attributes & values are actually
         // valid.
 
-        if ($errs->empty()) {    
+        if ($errs->empty()) {
             $stmt->bind_param(
                 'ssii',
                 $name,
@@ -97,14 +96,84 @@ class Service extends ModifiableEntity
                 $price,
                 $parentId
             );
-    
+
             assert($stmt->execute());
             $serviceId = $stmt->insert_id;
-    
-            return new Service($serviceId);        
+
+            return new Service($serviceId);
         }
 
         $errs->displayErrors();
+    }
+
+    /**
+     * @param Option $option
+     * @param object $value
+     * @return void
+     */
+
+    public function setValue($option, $newValue)
+    {
+        // See if this option already exists.
+        $updated = false;
+        foreach ($this->values as $attribute) {
+            // This attribute is being modified.
+            
+            if ($attribute->option->id === $option->id) {
+                // Validate the new value.
+                $option = $attribute->option;
+                $type = $option->type;
+            
+                if (!$attribute->set($newValue)) {
+                    // Invalid value, return.
+                    return false;
+                }
+            
+                $updated = true;
+            }
+        }
+
+        if ($updated) {
+            $this->update();
+            return;
+        }
+
+        // Proclaim that this service now has 
+        // the following option.
+
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "INSERT INTO `service_option` (
+                service_id,
+                option_id
+            ) VALUES (?, ?)"
+        );
+
+        $stmt->bind_param('ii', $this->id, $option->id);
+        assert($stmt->execute());
+
+        $serviceOptionId = $stmt->insert_id;
+
+        // Create a new value associated with
+        // the option and this service.
+
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "INSERT INTO `service_option_value` (
+                service_option_id,
+                `value`
+            ) VALUES (?, ?)"
+        );
+
+        // NOTE: Validate $value is Type
+        $stmt->bind_param(
+            'is', 
+            $serviceOptionId, 
+            strval($newValue)
+        );
+        
+        assert($stmt->execute());
+
+        $this->values[] = new Value($stmt->insert_id);
+        return true;
     }
 
     public function perform()
@@ -120,10 +189,37 @@ class Service extends ModifiableEntity
                 `description`,
                 price,
                 parent_id
-            ) VALUES (?, ?, ?, ?)"
+            ) VALUES (?, ?, ?, ?) WHERE id=?"
         );
 
-        throw new Error("TODO: Finish Service::__update");
+        $stmt->bind_param(
+            'ssii',
+            $this->name,
+            $this->description,
+            $this->price,
+            $this->parent->id,
+            $this->id
+        );
+
+        foreach ($this->values as $value) {
+            $stmt = DatabaseConnection::getInstance()->prepare(
+                "UPDATE `service_option_value` SET (
+                    `value`
+                ) VALUES (?) WHERE id=?"
+            );
+
+            $stmt->bind_param(
+                'si',
+                strval($value),
+                $value->id
+            );
+
+            assert($stmt->execute());
+        }
+
+        if ($this->parent != NULL) {
+            $this->parent->update();
+        }
     }
 
     public function isBase()
@@ -194,15 +290,14 @@ class Service extends ModifiableEntity
     public function summarize(
         &$result,
         &$visited
-    )
-    {
+    ) {
         // We've already added this service 
         // to the itemized bill.
-        
+
         foreach ($visited as $service) {
             if ($this->id == $service->id) return;
         }
-        
+
         $visited[] = $this->id;
 
         // Include the base price
