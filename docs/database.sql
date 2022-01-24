@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 23, 2022 at 10:58 PM
+-- Generation Time: Jan 24, 2022 at 04:00 PM
 -- Server version: 8.0.21
 -- PHP Version: 7.3.21
 
@@ -32,8 +32,9 @@ CREATE TABLE IF NOT EXISTS `attachment` (
   `id` int NOT NULL AUTO_INCREMENT,
   `ticket_id` int NOT NULL,
   `url` mediumtext NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  KEY `ticket_id` (`ticket_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -48,8 +49,10 @@ CREATE TABLE IF NOT EXISTS `comment` (
   `parent_id` int NOT NULL,
   `contents` varchar(500) NOT NULL,
   `author` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  KEY `ticket_id` (`ticket_id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -62,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `department` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -75,8 +78,10 @@ CREATE TABLE IF NOT EXISTS `departmenthead_department` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `department_id` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  KEY `department_id` (`department_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -153,8 +158,10 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   `user_id` int NOT NULL,
   `ticket_id` int NOT NULL,
   `inserted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  KEY `ticket_id` (`ticket_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -225,7 +232,8 @@ CREATE TABLE IF NOT EXISTS `options` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
   `type_id` int NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `type_id` (`type_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -238,9 +246,9 @@ DROP TABLE IF EXISTS `page`;
 CREATE TABLE IF NOT EXISTS `page` (
   `id` int NOT NULL AUTO_INCREMENT,
   `friendly_name` int NOT NULL,
-  `html` mediumtext NOT NULL,
+  `html` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -253,7 +261,7 @@ CREATE TABLE IF NOT EXISTS `priority` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `priority`
@@ -277,7 +285,8 @@ CREATE TABLE IF NOT EXISTS `service` (
   `price` int NOT NULL,
   `description` varchar(200) NOT NULL,
   `parent_id` int NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -291,8 +300,10 @@ CREATE TABLE IF NOT EXISTS `service_department` (
   `id` int NOT NULL AUTO_INCREMENT,
   `service_id` int NOT NULL,
   `department_id` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  KEY `service_id` (`service_id`),
+  KEY `department_id` (`department_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -336,7 +347,7 @@ CREATE TABLE IF NOT EXISTS `status` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `status`
@@ -368,20 +379,10 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `deleted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `was_deleted` int NOT NULL DEFAULT '0',
   `service_id` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `type`
---
-
-DROP TABLE IF EXISTS `type`;
-CREATE TABLE IF NOT EXISTS `type` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `priority_id` (`priority_id`),
+  KEY `service_id` (`service_id`),
+  KEY `status_id` (`status_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -401,15 +402,20 @@ CREATE TABLE IF NOT EXISTS `user` (
   `inserted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `deleted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `was_deleted` int NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  KEY `user_type_id` (`user_type_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id`, `email`, `password`, `display_name`, `user_type_id`, `created_at`, `inserted_at`, `deleted_at`, `was_deleted`) VALUES
-(1, 'toukawael@gmail.com', '8578173555a47d4ea49e697badfda270dee0858f', 'touka43', 1, '2022-01-23 22:57:15', '2022-01-23 22:57:15', '2022-01-23 22:57:15', 0);
+(1, 'toukawael@gmail.com', '8578173555a47d4ea49e697badfda270dee0858f', 'touka43', 1, '2022-01-23 22:57:15', '2022-01-23 22:57:15', '2022-01-23 22:57:15', 0),
+(2, 'toukawael@t5t5t.com', '99ebdbd711b0e1854a6c2e93f759efc2af291fd0', 'touka55', 1, '2022-01-23 23:26:30', '2022-01-23 23:26:30', '2022-01-23 23:26:30', 0),
+(3, 'toukawaelll@gmail.com', 'cd3f0c85b158c08a2b113464991810cf2cdfc387', 'touka66', 2, '2022-01-23 23:26:57', '2022-01-23 23:26:57', '2022-01-23 23:26:57', 0),
+(5, 'toukaghonaime@gmail.com', '99ebdbd711b0e1854a6c2e93f759efc2af291fd0', 'ttt', 1, '2022-01-24 13:01:54', '2022-01-24 13:01:54', '2022-01-24 13:01:54', 0),
+(6, 'mariamosama@gmail.com', '99ebdbd711b0e1854a6c2e93f759efc2af291fd0', 'touka', 1, '2022-01-24 14:56:23', '2022-01-24 14:56:23', '2022-01-24 14:56:23', 0);
 
 -- --------------------------------------------------------
 
@@ -422,7 +428,7 @@ CREATE TABLE IF NOT EXISTS `user_type` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `user_type`
@@ -444,12 +450,41 @@ CREATE TABLE IF NOT EXISTS `user_type_page` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_type_id` int NOT NULL,
   `page_id` int NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  KEY `page_id` (`page_id`),
+  KEY `user_type_id` (`user_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `attachment`
+--
+ALTER TABLE `attachment`
+  ADD CONSTRAINT `attachment_ibfk_1` FOREIGN KEY (`ticket_id`) REFERENCES `ticket` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `comment`
+--
+ALTER TABLE `comment`
+  ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`ticket_id`) REFERENCES `ticket` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `comment` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `departmenthead_department`
+--
+ALTER TABLE `departmenthead_department`
+  ADD CONSTRAINT `departmenthead_department_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `departmenthead_department_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `invoice`
+--
+ALTER TABLE `invoice`
+  ADD CONSTRAINT `invoice_ibfk_1` FOREIGN KEY (`ticket_id`) REFERENCES `ticket` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `invoice_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- Constraints for table `joint_error_languages`
@@ -460,11 +495,57 @@ ALTER TABLE `joint_error_languages`
   ADD CONSTRAINT `joint_table` FOREIGN KEY (`error_message_id`) REFERENCES `error_messages` (`id`);
 
 --
+-- Constraints for table `options`
+--
+ALTER TABLE `options`
+  ADD CONSTRAINT `options_ibfk_1` FOREIGN KEY (`type_id`) REFERENCES `user_type` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `service`
+--
+ALTER TABLE `service`
+  ADD CONSTRAINT `service_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `service` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `service_department`
+--
+ALTER TABLE `service_department`
+  ADD CONSTRAINT `service_department_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `service_department_ibfk_2` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
 -- Constraints for table `service_option`
 --
 ALTER TABLE `service_option`
   ADD CONSTRAINT `service_option_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `service_option_ibfk_3` FOREIGN KEY (`option_id`) REFERENCES `options` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `service_option_value`
+--
+ALTER TABLE `service_option_value`
+  ADD CONSTRAINT `service_option_value_ibfk_1` FOREIGN KEY (`service_option_id`) REFERENCES `service_option` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `ticket`
+--
+ALTER TABLE `ticket`
+  ADD CONSTRAINT `ticket_ibfk_1` FOREIGN KEY (`priority_id`) REFERENCES `priority` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `ticket_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `service` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `ticket_ibfk_3` FOREIGN KEY (`status_id`) REFERENCES `status` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `user_type_id` FOREIGN KEY (`user_type_id`) REFERENCES `user_type` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
+-- Constraints for table `user_type_page`
+--
+ALTER TABLE `user_type_page`
+  ADD CONSTRAINT `user_type_page_ibfk_1` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `user_type_page_ibfk_2` FOREIGN KEY (`user_type_id`) REFERENCES `user_type` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
