@@ -1,8 +1,10 @@
 <?php
 require_once '../errorPage.php';
 require_once '../validation.php';
+require_once '../model/logincheckmodel.php';
 require_once '../model/user.php';
 require_once '../model/database.php';
+
 session_start();
 
 $email = $_POST["email"];
@@ -26,6 +28,10 @@ if (Validation::isNullOrEmpty($password)) {
 }
 
 if ($errs->empty()) {
+ 
+          
+      
+          
     // echo "Attempted to login with $email and $password";
     $stmt = DatabaseConnection::getInstance()->prepare(
         "SELECT user.id FROM user
@@ -34,13 +40,16 @@ if ($errs->empty()) {
     $password = sha1($password);
     $stmt->bind_param('ss', $email, $password);
     $result = $stmt->execute();
+       
 
     if ($result) {
         $result = $stmt->get_result();
         if ($result->num_rows === 1) {
             $id = $result->fetch_assoc()["id"];
             $usr = new User($id);
+             $proxyi=new ProxyDP($usr);
             $_SESSION["user"] = $usr;
+              
         } else {
             $errs->emit(ErrorMsg::USER_DOES_NOT_EXIST);
             //  $errs->add(
@@ -48,6 +57,10 @@ if ($errs->empty()) {
             //  );
         }
     }
+
+
+
 }
+
 
 $errs->redirect("../view/viewall.php");
