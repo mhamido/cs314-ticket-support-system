@@ -1,34 +1,13 @@
 <?php
-include_once '../user.php';
-class SortByName implements SortInterface{
-
-
-  
-
-
-
-public function Sort($tickets){
-
-    usort($tickets, function($a, $b)
+class SortByName implements SortInterface
+{
+    public function Sort($tickets)
     {
-        if ($a->name==$b->name)
-        {
-        
-            return 0;
-        }
-        else if ($a->name > $b->name)
-        {
-            
-            return -1;
-        }
-        else {
-                      
-            return 1;
-        }
 
-    });}
+        usort($tickets, function ($a, $b) {
+            return strcasecmp($a->title, $b->title);
+        });
 
-    
+        return $tickets;
+    }
 }
-
-?>

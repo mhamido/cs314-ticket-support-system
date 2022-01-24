@@ -10,6 +10,7 @@ require_once "../model/report.php";
 require_once "../model/service.php";
 require_once "../validation.php";
 require_once "../model/report.php";
+require_once "../model/Factory/optionfactory.php";
 session_start();
 // var_dump($_POST);
 
@@ -85,21 +86,24 @@ class SearchFacade
 }
 
 if (isset($_POST["report_name"]) && Validation::isNullOrEmpty($_POST["report_name"])) {
-    $errs->emit(ErrorMsg::INVALID_VALLUE);
-    $errs->displayErrors();
+    $now = date('Y-m-d-H-i-s');
+    $reportName = "$user->displayName-$now";
 } else {
-    switch ($_POST["submit"]) {
-        case "fetch":
-            $report = new Report($_POST["report_id"]);
-            $report->run();
-            break;
-        case "create":
-            $reportName = $_POST["report_name"];
-            $searchticket = new SearchFacade();
-            $stmt = $searchticket->run($user->filter, $user, $_POST);        
-            $report = Report::create($reportName, $user, $stmt);
-            $report->run();
-            break;
-    }
+    $reportName = $_POST["report_name"];
 }
 
+$factory = new OptionFactory();
+$sort = $factory->createsort($_POST["sort"]);
+
+switch ($_POST["submit"]) {
+    case "fetch":
+        $report = new Report($_POST["report_id"]);
+        $report->run($sort);
+        break;
+    case "create":
+        $searchticket = new SearchFacade();
+        $stmt = $searchticket->run($user->filter, $user, $_POST);        
+        $report = Report::create($reportName, $user, $stmt);
+        $report->run($sort);
+        break;
+}

@@ -106,7 +106,7 @@ $tickets = $user->getVisibleTickets();
         <br>
         <label for="has_attachment">Only show tickets with attachments:</label>
         <input type="checkbox" name="attachment" id="attachment">
-        <br><br>
+        <br>
 
         <!-- <input type="checkbox" id="" name="ELE" value="status">
   <label for="priority"> New</label>
@@ -123,12 +123,11 @@ $tickets = $user->getVisibleTickets();
         <!-- 
         <input type="button" onclick='selects()' value="Select All" />
         <input type="button" onclick='deSelects()' value="Deselect All" /> <br><br> -->
-
-        <br><br>
+        <br>
         <label for="ticket_author_name">Ticket Author:</label>
         <input type="text" name="ticket_author_name" placeholder="Author name:" title="Type in a name"><br>
-        <br><br>
-        <br><br>
+        <br>
+        <br>
         <label for="services">Choose a service:</label>
         <select name="services" id="services">
           <option value="0" selected>All Services</option>
@@ -138,7 +137,15 @@ $tickets = $user->getVisibleTickets();
             </option>
           <?php } ?>
         </select>
-        <br><br>
+        <br>
+        <label for="sort">Sort:</label>
+        <select name="sort" id="sort">
+          <option value="id" selected>By ID</option>
+          <option value="name">By Name</option>
+          <option value="date">By Date</option>
+          <option value="priority">By Priority</option>
+        </select>
+        <br>
         <input type="submit" name="submit" value="create">
       </form>
 
@@ -399,6 +406,13 @@ $tickets = $user->getVisibleTickets();
               <?php echo $report->name; ?>
             </option>
           <?php } ?>
+        </select>
+        <label for="sort">Sort:</label>
+        <select name="sort" id="sort">
+          <option value="id" selected>By ID</option>
+          <option value="name">By Name</option>
+          <option value="date">By Date</option>
+          <option value="priority">By Priority</option>
         </select>
         <input type="submit" name="submit" value="fetch">
       </form>

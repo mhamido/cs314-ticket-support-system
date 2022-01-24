@@ -1,27 +1,12 @@
 <?php
-include_once '../user.php';
 
-class SortByPriority implements SortInterface{
-
-  
-public function Sort($tickets){
-
-    usort($tickets, function($a, $b)
+class SortByPriority implements SortInterface
+{
+    public function Sort($tickets)
     {
-        if ($a->priority==$b->priority)
-        {
-        
-            return 0;
-        }
-        else if ($a->priority > $b->priority)
-        {
-            
-            return -1;
-        }
-        else {
-                      
-            return 1;
-        }
-    });}
+        usort($tickets, function ($a, $b) {
+            return $a->priority <=> $b->priority;
+        });
+        return $tickets;
+    }
 }
-?>

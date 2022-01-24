@@ -1,29 +1,12 @@
 <?php
-include_once '../user.php';
 
-class SortById implements SortInterface{
-
-public function Sort($tickets){
-
-
-    usort($tickets, function($a, $b)
+class SortById implements SortInterface
+{
+    public function Sort($tickets)
     {
-        if ($a->id==$b->id)
-        {
-        
-            return 0;
-        }
-        else if ($a->id > $b->id)
-        {
-            
-            return -1;
-        }
-        else {
-                      
-            return 1;
-        }
-    });}
-
+        usort($tickets, function ($a, $b) {
+            return $a->id <=> $b->id;
+        });
+        return $tickets;
+    }
 }
-
-?>

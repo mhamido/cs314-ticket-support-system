@@ -55,13 +55,16 @@ class Report extends NamedEntity
         return $reports;
     }
 
-    public function run()
+    public function run($sort)
     {
         $rows = DatabaseConnection::getInstance()->query($this->sql);
         
         while ($row = $rows->fetch_assoc()) {
             $this->tickets[] = new Ticket($row["id"]);
         }
+
+        $this->tickets = $sort->Sort($this->tickets);
+
         include("../viewreport.php");
     }
 }
