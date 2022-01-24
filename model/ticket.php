@@ -4,8 +4,9 @@ require_once 'comment.php';
 require_once 'status.php';
 require_once 'priority.php';
 require_once 'service.php';
+require_once 'entity.php';
 
-class Ticket implements Subject
+class Ticket extends ModifiableEntity implements Subject
 {
     public $id;
     public $unit;
@@ -63,7 +64,7 @@ class Ticket implements Subject
         }
     }
 
-    public function update()
+    protected function __update()
     {
         $stmt = DatabaseConnection::getInstance()->prepare(
             "UPDATE ticket SET
