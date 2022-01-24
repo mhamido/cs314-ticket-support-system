@@ -1,6 +1,8 @@
 <?php
 require_once 'model/user.php';
 require_once 'model/ticket.php';
+require_once 'model/adapter.php';
+
 session_start();
 $ticket = $_SESSION["ticket"];
 $user = $ticket->author;
@@ -104,3 +106,9 @@ $user = $ticket->author;
 </body>
 
 </html>
+<iframe id="my_iframe" style="display:none;"></iframe>
+<script>
+    function Download(url) {
+        document.getElementById('my_iframe').src = url;
+    };
+</script>
