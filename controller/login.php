@@ -1,8 +1,10 @@
 <?php
 require_once '../errorPage.php';
 require_once '../validation.php';
+require_once '../model/logincheck.php';
 require_once '../model/user.php';
 require_once '../model/database.php';
+
 session_start();
 
 $email = $_POST["email"];
@@ -48,6 +50,9 @@ if ($errs->empty()) {
             //  );
         }
     }
+$proxyi=new ProxyDP($email,$password,$type);
+
+
 }
 
 $errs->redirect("../view/viewall.php");
