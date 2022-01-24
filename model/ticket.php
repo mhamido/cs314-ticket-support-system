@@ -17,6 +17,8 @@ class Ticket implements Subject
     public $author;
     public $comments;
     public $dateCreated;
+    public $State;
+    public $state_description;
 
     public $observers = array();
     public function __construct($id)
@@ -115,4 +117,22 @@ class Ticket implements Subject
             $obs->send($this);
         }
     }
+    
+    public function setState($State)
+    {
+        $this->State = $State;
+    }
+    
+    public function getState()
+    {
+        return $this->State;
+    }
+    
+    public function getDescription()
+    {
+        return $this->state_description;
+    }
+    
+    
+    
 }
