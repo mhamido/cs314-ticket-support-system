@@ -1,45 +1,28 @@
 <?php
 
-class Reciever{
-
-private  $services;
-private $oldservice;
-public function setservice($services){
-
-    $this->services=$services;
+class Reciever
+{
+    private  $services;
+    private $oldservice;
     
+    public function setservice($services)
+    {
+        $this->services = $services;
     }
 
-    public function setoldservice($oldservice){
-
-        $this->oldservice=$this->services;
-        
-        }
-
-
-public function update(){
+    public function setoldservice($oldservice)
+    {
+        $this->oldservice = $this->services;
+    }
 
 
+    public function update()
+    {
+        echo ("updated");
+    }
 
-   echo("updated");
-
+    public function revertupdate()
+    {
+        echo ("unupdated");
+    }
 }
-
-public function revertupdate(){
-
-
-
-    echo("unupdated");
-
-}
-}
-
-
-
-
-
-
-
-
-
-?>
