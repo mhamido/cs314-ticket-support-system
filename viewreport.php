@@ -5,6 +5,8 @@ require_once "../model/report.php";
 $user = $this->user;
 $tickets = $this->tickets;
 // var_dump($user);
+$mindate = null;
+$maxdate = null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,13 +40,19 @@ $tickets = $this->tickets;
                 <tr>
                     <th>Ticket ID</th>
                     <th>Ticket Title</th>
+                    <th>Ticket Author</th>
                     <th>Date Issued</th>
+                    <th>Primary Service</th>
                     <th>Status</th>
                     <th>Priority</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($tickets as $ticket) { ?>
+                    <?php
+                        if ($mindate == null || $ticket->dateCreated < $mindate) $mindate = $ticket->dateCreated;
+                        if ($maxdate == null || $ticket->dateCreated > $maxdate) $maxdate = $ticket->dateCreated;
+                    ?>
                     <tr>
                         <td>
                             <!-- <a class="navi-link" href="../controller/manageTicket.php?ticket_id=<?php echo ($ticket->id); ?>" data-toggle="modal">7<?php echo ($ticket->id) ?></a> -->
@@ -53,7 +61,9 @@ $tickets = $this->tickets;
                             </form>
                         </td>
                         <td><?php echo ($ticket->title) ?></td>
+                        <td><?php echo ($ticket->author->displayName); ?></td>
                         <td><?php echo ($ticket->dateCreated) ?></td>
+                        <td><?php echo ($ticket->service->name); ?></td>
                         <?php if ($ticket->status->id() === 13) { ?>
                             <td><span class="badge badge-danger m-0"><?php echo ($ticket->status->name()) ?></span></td>
                         <?php } elseif ($ticket->status->id() === 3 || $ticket->status->id() === 4) { ?>
@@ -73,6 +83,26 @@ $tickets = $this->tickets;
                 <?php  } ?>
             </tbody>
         </table>
+        <h3>Number of Rows: <?php echo sizeof($tickets); ?></h3>
+        <h4><?php echo ("Issued from $mindate to $maxdate"); ?></h4>
+        <h4>
+            <table>
+                <?php foreach (LookupTable::fetch("status") as $status) { ?>
+                    <?php 
+                        [$id, $name] = $status;
+                        $count = 0; 
+                    ?>
+                    <?php foreach ($tickets as $ticket) { ?>
+                        <?php if ($ticket->status->id == $id) $count += 1; ?>
+                    <?php } ?>
+                    <tr>
+                        <td><?php echo $name; ?></td>   
+                        <td><?php echo $count; ?></td>
+                    </tr>
+                <?php } ?>
+            </table>
+        </h4>
+        <h3></h3>
             <form action="../view/viewall.php" method="post" style="display: inline;">
                 <button class="button button" style="display: inline;">Homepage</button>
             </form>
