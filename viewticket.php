@@ -57,13 +57,14 @@ $ticket = $_SESSION["ticket"];
 
 					<label for="myfile">Select a file:</label><br>
 
-					<label for="myfile">The serves for this ticket:</label><br>
-					<?php
-					if ($ticket->service) {
-						$desc = $ticket->service->description;
-						echo "<label for=\"description\"> $desc</label>";
-					}
-					?>
+					<label for="myfile">The services for this ticket:</label><br>
+					<?php $service = $ticket->service; ?>
+					<?php while ($service != NULL) { ?>
+						<?php $desc = $service->name; ?>
+						<label for="description"><?php echo $desc; ?></label>
+						<?php $service = $service->parent; ?>
+						<br>
+					<?php } ?>
 
 					<div class="container-login100-form-btn">
 						<button type="submit" name="edit" class="login100-form-btn" value="on" onClick="createticket()">

@@ -1,6 +1,7 @@
 <?php
 require_once '../model/user.php';
 require_once '../model/database.php';
+require_once "../model/report.php";
 session_start();
 
 $user = $_SESSION["user"];
@@ -99,24 +100,13 @@ $tickets = $user->getVisibleTickets();
     <div class="container jumbotron">
       <br><br>
       <h4>Generate Report:</h4>
-
       <form action="../controller/report.php" method="post">
         <label for="name">Report Name:</label>
         <input type="text" name="report_name" id="report_name">
         <br>
-        <?php foreach (LookupTable::fetch("status") as $status) { ?>
-          <?php [$id, $name] = $status; ?>
-          <label for="<?php echo $id; ?>"><?php echo $name; ?></label>
-          <input type="checkbox" name="<?php echo $name; ?>" id="">
-          <br>
-        <?php } ?>
+        <label for="has_attachment">Only show tickets with attachments:</label>
+        <input type="checkbox" name="attachment" id="attachment">
         <br><br>
-        <?php foreach (LookupTable::fetch("priority") as $priority) { ?>
-          <?php [$id, $name] = $priority; ?>
-          <label for="<?php echo $id; ?>"><?php echo $name; ?></label>
-          <input type="checkbox" name="<?php echo $name; ?>" id="">
-          <br>
-        <?php } ?>
 
         <!-- <input type="checkbox" id="" name="ELE" value="status">
   <label for="priority"> New</label>
@@ -130,14 +120,13 @@ $tickets = $user->getVisibleTickets();
   <label for="status"> Closed</label>
   <input type="checkbox" id="priority" name="ELE" value="High">
   <label for="priority">High</label><br> -->
-
+        <!-- 
         <input type="button" onclick='selects()' value="Select All" />
-        <input type="button" onclick='deSelects()' value="Deselect All" /> <br><br>
+        <input type="button" onclick='deSelects()' value="Deselect All" /> <br><br> -->
 
         <br><br>
-        <h4>Filter By Name And ID</h4>
+        <label for="ticket_author_name">Ticket Author:</label>
         <input type="text" name="ticket_author_name" placeholder="Author name:" title="Type in a name"><br>
-        <input type="text" name="ticket_id" placeholder="Ticket ID:" title="Type in a name">
         <br><br>
         <br><br>
         <label for="services">Choose a service:</label>
@@ -149,8 +138,10 @@ $tickets = $user->getVisibleTickets();
             </option>
           <?php } ?>
         </select>
-        <input type="submit" value="Search">
+        <br><br>
+        <input type="submit" name="submit" value="create">
       </form>
+
 
 
       <script type="text/javascript">
@@ -396,6 +387,21 @@ $tickets = $user->getVisibleTickets();
           border: 1px solid rgba(0, 0, 0, 0.125);
         }
       </style>
+    </div>
+
+    <div class="container jumbotron">
+      <br><br>
+      <h4>View Report:</h4>
+      <form action="../controller/report.php" method="post">
+        <select name="report_id" id="report_id">
+          <?php foreach (Report::fetch($user->id) as $report) { ?>
+            <option name="<?php echo $report->name; ?>" value="<?php echo $report->id; ?>">
+              <?php echo $report->name; ?>
+            </option>
+          <?php } ?>
+        </select>
+        <input type="submit" name="submit" value="fetch">
+      </form>
     </div>
   </body>
 

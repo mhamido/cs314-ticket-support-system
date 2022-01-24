@@ -3,26 +3,28 @@ require_once "../model/user.php";
 require_once "../model/database.php";
 require_once "../errorPage.php";
 require_once "../model/filter.php";
+require_once "../model/authorFilter.php";
+require_once "../model/serviceFilter.php";
+require_once "../model/attachmentFilter.php";
 require_once "../model/report.php";
 require_once "../model/service.php";
-
+require_once "../validation.php";
+require_once "../model/report.php";
 session_start();
-var_dump($_POST);
+// var_dump($_POST);
 
 $errs = new ErrorPage();
 $user = $_SESSION["user"];
 $filter = $user->filter;
 
-$reportName = $_POST["report_name"];
-
 interface search
 {
-    public function runsearch($filter, $user , $post);
+    public function runsearch($filter, $user, $post);
 }
 
 class searchservices implements search
 {
-    public function runsearch($filter, $user , $post)
+    public function runsearch($filter, $user, $post)
     {
         if (!isset($post["services"])) {
             return $filter;
@@ -33,6 +35,7 @@ class searchservices implements search
                 return new ServiceFilter($filter, $service->id);
             }
         }
+        return $filter;
     }
 }
 
@@ -40,10 +43,8 @@ class searchattachment implements search
 {
     public function runsearch($filter, $user, $post)
     {
-        if (isset($_POST["attachment"])) 
-        {
-            $name = filter_var($_POST["ticket_author_name"],FILTER_SANITIZE_STRING);
-            return new AttachmentFilter($filter, $name);
+        if (isset($_POST["attachment"])) {
+            return new AttachmentFilter($filter);
         }
         return $filter;
     }
@@ -51,11 +52,10 @@ class searchattachment implements search
 
 class searchauthor implements search
 {
-    public function runsearch($filter, $user , $post)
+    public function runsearch($filter, $user, $post)
     {
-        if (isset($_POST["ticket_author_name"])) 
-        {
-            $name = filter_var($_POST["ticket_author_name"],FILTER_SANITIZE_STRING);
+        if (isset($_POST["ticket_author_name"]) && $_POST["ticket_author_name"]!="") {
+            $name = filter_var($_POST["ticket_author_name"], FILTER_SANITIZE_STRING);
             return new AuthorFilter($filter, $name);
         }
         return $filter;
@@ -77,18 +77,29 @@ class SearchFacade
 
     public function run($filter, $user, $post)
     {
+        $filter = $this->searchattachment->runsearch($filter, $user, $post);
         $filter = $this->searchauthor->runsearch($filter, $user, $post);
         $filter = $this->searchservices->runsearch($filter, $user, $post);
-        $filter = $this->searchattachment->runsearch($filter, $user, $post);
         return $filter->generate();
     }
 }
 
-class FacadePattern
-{
-    public static function main($user, $post) 
-    {
-        $searchticket = new SearchFacade();
-        $searchticket->run($user->filter, $user , $post);	
+if (isset($_POST["report_name"]) && Validation::isNullOrEmpty($_POST["report_name"])) {
+    $errs->emit(ErrorMsg::INVALID_VALLUE);
+    $errs->displayErrors();
+} else {
+    switch ($_POST["submit"]) {
+        case "fetch":
+            $report = new Report($_POST["report_id"]);
+            $report->run();
+            break;
+        case "create":
+            $reportName = $_POST["report_name"];
+            $searchticket = new SearchFacade();
+            $stmt = $searchticket->run($user->filter, $user, $_POST);        
+            $report = Report::create($reportName, $user, $stmt);
+            $report->run();
+            break;
     }
 }
+

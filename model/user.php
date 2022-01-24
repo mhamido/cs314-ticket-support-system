@@ -170,7 +170,7 @@ class User implements Observer
         return $stmt->execute();
     }
 
-    public function createTicket($unit, $title,  $description, $status, $priority, $service = NULL)
+    public function createTicket($unit, $title,  $description, $status, $priority, $service)
     {
         $stmt = DatabaseConnection::getInstance()->prepare(
             "INSERT INTO ticket (
@@ -184,11 +184,9 @@ class User implements Observer
             ) VALUES (?, ?, ?, ?, ?, ?, ?)"
         );
 
-        // TODO: add service.
-
-        $sid = $status->id();
-        $pid = $priority->id();
-        $serviceId = ($service != NULL ? $service->id : 0);
+        $sid = $status->id;
+        $pid = $priority->id;
+        $serviceId = $service->id;
 
         $stmt->bind_param(
             'issiiii',

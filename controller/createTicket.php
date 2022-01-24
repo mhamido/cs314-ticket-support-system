@@ -37,7 +37,8 @@ if (empty($services) || sizeof($services) > 1) {
         $title,
         $description,
         $status,
-        $priority
+        $priority,
+        $service
     );
 
     $ticket->service = $service;

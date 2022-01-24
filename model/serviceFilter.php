@@ -12,6 +12,6 @@ class ServiceFilter extends FilterDecorator
 
     public function generate()
     {
-        return  $this->filter->generate()." AND ticket.service_id={$this->serviceId}')";
+        return  $this->filter->generate()." AND ticket.service_id={$this->serviceId}";
     }
 }
