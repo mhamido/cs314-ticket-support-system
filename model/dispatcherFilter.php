@@ -4,15 +4,10 @@ class DispatcherFilter extends Filter
 {
     public function __construct()
     {
+
     }
     public function generate()
     {
-     return
-     "SELECT * FROM ticket WHERE TRUE";
-       
-
-        
-     
-
+        return "SELECT * FROM ticket WHERE TRUE";
     }
 }
