@@ -41,12 +41,12 @@
     <br><br><br>
 
     <div>
-        <h2>Add value to service:</h2>
+        <h2>Add Option to Service:</h2>
         <form action="../controller/addOption.php" method="post">
             <label for="service">Service:</label>
             <select name="service" id="service">
                 <?php foreach (Service::fetch() as $service) { ?>
-                    <option value="<?php echo $service->id?>">
+                    <option value="<?php echo $service->id ?>">
                         <?php echo $service->name; ?>
                     </option>
                 <?php } ?>
@@ -60,10 +60,6 @@
                     </option>
                 <?php } ?>
             </select>
-            <br><br>
-            <label for="value">Value:</label>
-            <input type="text" name="value" id="value" required>
-            <br><br>
             <button type="submit">Add value</button>
         </form>
     </div>

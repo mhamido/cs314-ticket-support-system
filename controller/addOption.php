@@ -7,21 +7,17 @@ require_once '../model/service/option.php';
 $errs = new ErrorPage();
 $serviceID = $_POST["service"];
 $optionID = $_POST["option"];
-$value = $_POST["value"];
-
-if (!($value = filter_var($value, FILTER_SANITIZE_STRING))) {
-    $errs->emit(ErrorMsg::INVALID_VALLUE);
-}
 
 if ($errs->empty()) {
     $option = new Option($optionID);
     $service = new Service($serviceID);
 
-    if (!$option->type->validate($value)) {
-        $errs->emit(ErrorMsg::INVALID_VALLUE);
-    } else {
-        $service->setValue($option, $value);
-    }
+    $stmt = DatabaseConnection::getInstance()->prepare(
+        "INSERT INTO service_option (service_id, option_id) VALUES (?, ?)"
+    );
+    
+    $stmt->bind_param('ii', $serviceID, $optionID);
+    $stmt->execute();
 }
 
 $errs->redirect("../view/viewall.php");

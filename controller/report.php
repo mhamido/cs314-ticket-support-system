@@ -88,7 +88,7 @@ class SearchFacade
 if (isset($_POST["report_name"]) && Validation::isNullOrEmpty($_POST["report_name"])) {
     $now = date('Y-m-d-H-i-s');
     $reportName = "$user->displayName-$now";
-} else {
+} else if (isset($_POST["report_name"])) {
     $reportName = $_POST["report_name"];
 }
 

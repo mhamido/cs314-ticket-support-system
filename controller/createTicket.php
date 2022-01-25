@@ -45,9 +45,10 @@ if (empty($services) || sizeof($services) > 1) {
     $ticket->register($user);
     $ticket->notify();
     $_SESSION["ticket"] = $ticket;
-
+    $_SESSION["service"] = $service;
     $createpdf = new createpdf();
     $mpdfadaptor = new mpdfadapter($createpdf, $user, $ticket);
     $mpdfadaptor->notify();
 }
-$errs->redirect("../invoice.php");
+
+$errs->redirect("../view/fillOptions.php");

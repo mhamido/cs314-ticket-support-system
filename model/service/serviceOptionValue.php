@@ -1,6 +1,5 @@
 <?php
 require_once 'option.php';
-require_once '../entity.php';
 
 class Value extends Entity
 {

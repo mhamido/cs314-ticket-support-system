@@ -19,7 +19,10 @@ if (!$type) {
 }
 
 if ($errs->empty()) {
-    Option::create($type, $name);
+    Option::create(
+        $type, 
+        $name
+    );
 }
 
 $errs->redirect("../view/createService.php");

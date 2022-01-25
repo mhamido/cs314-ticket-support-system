@@ -3,6 +3,7 @@
 require_once '../model/service.php';
 require_once '../model/database.php';
 require_once '../errorPage.php';
+session_start();
 
 $errs = new ErrorPage();
 
@@ -37,6 +38,7 @@ if ($errs->empty()) {
         $attributes,
         new Service($parent)
     );
+    $_SESSION["service"] = $service;
 }
 
 $errs->redirect("../view/viewall.php");

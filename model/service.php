@@ -1,6 +1,8 @@
 <?php
 
 require_once "entity.php";
+require_once "service/option.php";
+require_once "service/serviceOptionValue.php";
 
 class Service extends ModifiableEntity
 {
@@ -51,6 +53,27 @@ class Service extends ModifiableEntity
         while ($row = $result->fetch_assoc()) {
             $this->values[] = new Value($row["id"]);
         }
+    }
+
+    public function options()
+    {
+        $options = array();
+        $stmt = DatabaseConnection::getInstance()->prepare(
+            "SELECT option_id FROM `service_option` WHERE service_id=?"
+        );
+        $stmt->bind_param('i', $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        // var_dump($result->fetch_assoc());
+        // exit(0);
+
+        assert($result);
+        
+        while ($row = $result->fetch_assoc()) {
+            $options[] = new Option($row["option_id"]);
+        }
+
+        return $options;
     }
 
     public static function create(
@@ -135,7 +158,7 @@ class Service extends ModifiableEntity
 
         if ($updated) {
             $this->update();
-            return;
+            return true;
         }
 
         // Proclaim that this service now has 

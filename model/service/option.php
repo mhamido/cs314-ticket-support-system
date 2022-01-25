@@ -30,7 +30,7 @@ class Option extends NamedEntity
      * @return Option
      */
 
-    public static function create($type, $name)
+    public static function create($typeid, $name)
     {
         $stmt = DatabaseConnection::getInstance()->prepare(
             "INSERT INTO `options` (
@@ -38,7 +38,8 @@ class Option extends NamedEntity
                 `name`
             ) VALUES (?, ?)"
         );
-        $stmt->bind_param('is', $type->id, $name);
+
+        $stmt->bind_param('is', $typeid, $name);
         assert($stmt->execute());
         return new Option($stmt->insert_id);
     }

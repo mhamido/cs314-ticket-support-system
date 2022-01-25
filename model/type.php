@@ -21,6 +21,8 @@ class Type extends LookupTable
             default:
                 return $value instanceof $this->name;
         }
+        var_dump($value);
+        exit(0);
     }
     
     // Common types, preinstantiated for ease of use.
