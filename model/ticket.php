@@ -166,6 +166,7 @@ class Neww implements State
 {
     public function doAction($ticket)
     {
+        $ticket->status = new Status($ticket->status->id + 1);
         // $ticket->setState(new Neww());
         $ticket->setState(new On_hold());
     }
@@ -178,7 +179,7 @@ class On_hold implements State
 {
     public function doAction($ticket)
     {
-        // $ticket->setState(new On_hold());
+        $ticket->status = new Status($ticket->status->id + 1);
         $ticket->setState(new ProgressState());
     }
     public function description()
@@ -191,8 +192,7 @@ class ProgressState implements State
 {
     public function doAction($ticket)
     {
-        // $ticket->setState(new ProgressState());
-        $ticket->state_description = "ticket in progress";
+        $ticket->status = new Status($ticket->status->id + 1);
         $ticket->setState(new Resolved());
     }
     public function description()
