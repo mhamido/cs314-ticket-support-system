@@ -5,6 +5,10 @@ class Reciever
     private  $services;
     private $oldservice;
     
+    public function __construct($id)
+    {
+        $this->id=$id;
+    }
     public function setservice($services)
     {
         $this->services = $services;
@@ -16,13 +20,15 @@ class Reciever
     }
 
 
-    public function update()
+    public function Delete()
     {
-        echo ("updated");
+        DatabaseConnection::getInstance()->query  ("UPDATE ticket SET ticket.was_deleted=1 
+        WHERE ticket.id=$this->id");
     }
 
-    public function revertupdate()
+    public function RevertDelete()
     {
-        echo ("unupdated");
+        DatabaseConnection::getInstance()->query  ("UPDATE ticket SET ticket.was_deleted=0 
+        WHERE ticket.id=$this->id");
     }
 }
