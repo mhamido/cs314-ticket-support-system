@@ -2,10 +2,13 @@
 require_once '../model/user.php';
 require_once '../model/database.php';
 require_once "../model/report.php";
+require_once "../model/entity.php";
+require_once "../model/style.php";
 session_start();
 
 $user = $_SESSION["user"];
 $tickets = $user->getVisibleTickets();
+$theme = Theme::get($user);
 // var_dump($user);
 ?>
 
@@ -427,11 +430,11 @@ $tickets = $user->getVisibleTickets();
 
        <input type="submit"  name="deletecommand" value="deletecommand">
        
-     <input type="submit" name="undocommand" value="undocommand">
+    <inp  ut type="submit" name="undocommand" value="undocommand">
     
-       </form>
+      </form>
     </form>
     </div>
   </body>
-
+  <?php if ($theme != null) echo $theme->linkStyle(); ?>
 </html>

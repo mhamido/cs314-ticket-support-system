@@ -39,12 +39,12 @@ class Attachment
         return $stmt->execute();
     }
 
-    public function delete()
-    {
-        $stmt = DatabaseConnection::getInstance()->prepare("DELETE FROM attachment WHERE  Attachment_id=?");
-        $stmt->bind_param("i", $this->id);
-        return $stmt->execute();
-    }
+    // public function delete()
+    // {
+    //     $stmt = DatabaseConnection::getInstance()->prepare("DELETE FROM attachment WHERE  Attachment_id=?");
+    //     $stmt->bind_param("i", $this->id);
+    //     return $stmt->execute();
+    // }
 
     public static function create($url)
     {

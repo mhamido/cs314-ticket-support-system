@@ -11,6 +11,7 @@ class User implements Observer
     public $password;
     public $displayName;
     public $filter;
+    public $homepage = "view/viewall.php";
 
     public function __construct($id)
     {
@@ -209,4 +210,5 @@ class User implements Observer
         // Return an instance with the id of the inserted ticket.
         return new Ticket($id);
     }
+
 }
