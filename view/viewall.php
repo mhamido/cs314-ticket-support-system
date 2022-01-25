@@ -75,6 +75,7 @@ $tickets = $user->getVisibleTickets();
             <?php } else {  ?>
               <td><span class="badge badge-info m-0"><?php echo ($ticket->priority->name()) ?></span></td>
             <?php } ?>
+            <td>
           </tr>
         <?php  } ?>
       </tbody>
@@ -416,6 +417,20 @@ $tickets = $user->getVisibleTickets();
         </select>
         <input type="submit" name="submit" value="fetch">
       </form>
+    <form action="../controller/Command.php" method="post"> 
+      <select name="deleteticket" id="deleteticket">
+       <?php foreach ($tickets as $ticket)  {?>
+       <option value="<?php echo($ticket->id) ?>"><?php echo($ticket->id) ?></option>
+       <?php } ?> 
+       </select>
+  
+
+       <input type="submit"  name="deletecommand" value="deletecommand">
+       
+     <input type="submit" name="undocommand" value="undocommand">
+    
+       </form>
+    </form>
     </div>
   </body>
 

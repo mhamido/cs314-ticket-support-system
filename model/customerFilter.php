@@ -11,6 +11,7 @@ class CustomerFilter extends Filter
 
     public function generate()
     {
+        
         return "SELECT * FROM ticket WHERE ticket.author={$this->user->id}";
     }
 }

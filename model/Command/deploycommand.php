@@ -1,5 +1,6 @@
 <?php
-include_once './receiver.php';
+require_once 'command.php';
+include_once 'receiver.php';
 class DeployCommand implements Command
 {
     private $recievers;
@@ -12,6 +13,6 @@ class DeployCommand implements Command
     public function execute()
     {
 
-        $this->recievers->update();
+        $this->recievers->Delete();
     }
 }
