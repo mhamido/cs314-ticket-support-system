@@ -76,7 +76,6 @@ $ticket = $_SESSION["ticket"];
 							Delete
 						</button>
 					</div><br>
-
 					<!--
 					<label for="email">E_mail:</label>
 					<div class="wrap-input100 validate-input m-b-16" data-validate="Please enter your email">
@@ -105,7 +104,13 @@ $ticket = $_SESSION["ticket"];
 							Close
 						</a>
 					</div>
-
+				</form>
+				<form action="controller/advanceState.php" method="post">
+					<div class="container-login100-form-btn">
+						<button type="submit" name="doAction" class="login100-form-btn" value="on">
+							Move to Next State
+						</button>
+					</div><br>
 				</form>
 			</div>
 		</div>
