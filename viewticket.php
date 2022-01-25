@@ -59,7 +59,7 @@ $ticket = $_SESSION["ticket"];
 
 					<label for="myfile">The services for this ticket:</label><br>
 					<?php $service = $ticket->service; ?>
-					<?php while ($service != NULL) { ?>
+					<?php while ($service != null) { ?>
 						<?php $desc = $service->name; ?>
 						<label for="description"><?php echo $desc; ?></label>
 						<?php $service = $service->parent; ?>

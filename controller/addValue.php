@@ -18,9 +18,6 @@ foreach ($service->options() as $option) {
     $value = $_POST[strval($option->id)];
     $isValid = $option->type->validate($value);
     
-    var_dump($value);
-    var_dump($isValid);
-    
     if (!$isValid) {
         $errs->emit(ErrorMsg::INVALID_VALLUE);
         $shouldUpdate = false;

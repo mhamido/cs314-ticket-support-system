@@ -33,6 +33,7 @@ class Service extends ModifiableEntity
         if ($result["parent_id"] != 0) {
             $this->parent = new Service($result["parent_id"]);
         }
+        assert(!($this->parent instanceof stdClass));
 
         $stmt = DatabaseConnection::getInstance()->prepare(
             "SELECT service_option_value.id
@@ -81,13 +82,13 @@ class Service extends ModifiableEntity
         $price,
         $description,
         $values = array(),
-        $parent = NULL
+        $parent = null
     ) {
         $parentId = 0;
         $serviceId = -1;
         $errs = new ErrorPage();
 
-        if ($parent != NULL) {
+        if ($parent != null) {
             $parentId = $parent->id;
         }
 
@@ -207,16 +208,16 @@ class Service extends ModifiableEntity
     protected function __update()
     {
         $stmt = DatabaseConnection::getInstance()->prepare(
-            "UPDATE `service` SET (
-                `name`,
-                `description`,
-                price,
-                parent_id
-            ) VALUES (?, ?, ?, ?) WHERE id=?"
+            "UPDATE `service` SET
+                `name`=?,
+                `description`=?,
+                price=?,
+                parent_id=?
+            WHERE id=?"
         );
 
         $stmt->bind_param(
-            'ssii',
+            'ssiii',
             $this->name,
             $this->description,
             $this->price,
@@ -226,9 +227,8 @@ class Service extends ModifiableEntity
 
         foreach ($this->values as $value) {
             $stmt = DatabaseConnection::getInstance()->prepare(
-                "UPDATE `service_option_value` SET (
-                    `value`
-                ) VALUES (?) WHERE id=?"
+                "UPDATE `service_option_value` SET
+                    `value`=? WHERE id=?"
             );
 
             $stmt->bind_param(
@@ -238,10 +238,6 @@ class Service extends ModifiableEntity
             );
 
             assert($stmt->execute());
-        }
-
-        if ($this->parent != NULL) {
-            $this->parent->update();
         }
     }
 

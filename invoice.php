@@ -80,7 +80,7 @@ $user = $ticket->author;
 
                         <?php $sum = 0; ?>
                         <?php $service = $ticket->service; ?>
-                        <?php while ($service != null) { ?>
+                        <?php while ($service != null && !($service instanceof stdClass)) { ?>
                             <tr>
                                 <td><?php echo $service->name; ?></td>
                                 <td>$<?php echo $service->price; ?></td>

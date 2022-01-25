@@ -11,18 +11,14 @@ class Type extends LookupTable
     public function validate($value) {
         switch (strtolower($this->name)) {
             case "integer":
-                return is_int($value);
+                return ($value == 0) || filter_var($value, FILTER_VALIDATE_INT);
             case "double":
-                return is_double($value);
+                return filter_var($value, FILTER_VALIDATE_FLOAT);
             case "string":
-                return is_string($value);
+                return filter_var($value, FILTER_SANITIZE_STRING);
             case "boolean":
-                return is_bool($value);
-            default:
-                return $value instanceof $this->name;
+                return filter_var($value, FILTER_VALIDATE_BOOLEAN);
         }
-        var_dump($value);
-        exit(0);
     }
     
     // Common types, preinstantiated for ease of use.
