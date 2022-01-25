@@ -100,11 +100,12 @@ class User implements Observer
         $stmt->execute();
     }
 
-    public function getVisibleTickets()
+    public function getVisibleTickets($hidden=false)
     {
         $tickets = array();
         $stmt = $this->filter->generate();
-        // var_dump($stmt);
+        if(!$hidden)
+        $stmt=$stmt." and ticket.was_deleted=0";
         $result = DatabaseConnection::getInstance()->query($stmt);
         if (!$result) {
             return $tickets;
