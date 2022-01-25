@@ -62,6 +62,21 @@ class Ticket extends ModifiableEntity implements Subject
         while ($commentID = $result->fetch_row()) {
             $this->comments[] = new Comment($commentID);
         }
+
+        switch ($this->status->name) {
+            case "New":
+                $this->State = new Neww();
+                break;
+            case "OnHold":
+                $this->State = new On_hold();
+                break;
+            case "InProgress":
+                $this->State = new ProgressState();
+                break;
+            case "Resolved":
+                $this->State = new Resolved();
+                break;
+        }
     }
 
     protected function __update()
@@ -118,22 +133,82 @@ class Ticket extends ModifiableEntity implements Subject
             $obs->send($this);
         }
     }
-    
+
     public function setState($State)
     {
         $this->State = $State;
     }
-    
-    public function getState()
+
+    public function nextState()
     {
+        $this->State->doAction($this);
+        $this->state_description = $this->State->description();
+    }
+
+    public function getState()
+    {        
         return $this->State;
     }
-    
+
     public function getDescription()
     {
         return $this->state_description;
     }
-    
-    
-    
+}
+
+interface State
+{
+    public function doAction($ticket);
+    public function description();
+}
+
+class Neww implements State
+{
+    public function doAction($ticket)
+    {
+        // $ticket->setState(new Neww());
+        $ticket->setState(new On_hold());
+    }
+    public function description()
+    {
+        return "new ticket";
+    }
+}
+class On_hold implements State
+{
+    public function doAction($ticket)
+    {
+        // $ticket->setState(new On_hold());
+        $ticket->setState(new ProgressState());
+    }
+    public function description()
+    {
+        return "ticket on hold";
+    }
+}
+
+class ProgressState implements State
+{
+    public function doAction($ticket)
+    {
+        // $ticket->setState(new ProgressState());
+        $ticket->state_description = "ticket in progress";
+        $ticket->setState(new Resolved());
+    }
+    public function description()
+    {
+        return "ticket in progress";
+    }
+}
+
+class Resolved implements State
+{
+    public function doAction($ticket)
+    {
+        $ticket->state_description = "ticket resolved";
+    }
+    public function description()
+    {
+        return "ticket resolved";
+    }
 }
